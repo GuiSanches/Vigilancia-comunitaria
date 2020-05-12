@@ -1,29 +1,17 @@
-import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import {
-    Image,
-    Platform,
     StyleSheet,
-    Text,
-    TextInput,
     KeyboardAvoidingView,
     Keyboard,
-    Button,
-    TouchableOpacity,
-    View,
     ToastAndroid,
     ImageBackground
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ScrollView } from 'react-native-gesture-handler';
 import * as theme from "../constants/Theme.js";
 import {
     CustomText,
     CustomTextInput,
     CustomButton
 } from "../components/CustomElements";
-
-import { MonoText } from '../components/StyledText';
 
 const VALID_EMAIL = "";
 const VALID_PASSWORD = "";
@@ -104,33 +92,6 @@ export default LoginScreen
 LoginScreen.navigationOptions = {
     header: null,
 };
-
-function DevelopmentModeNotice() {
-    if (__DEV__) {
-        const learnMoreButton = (
-            <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-                Learn more
-            </Text>
-        );
-
-        return (
-            <Text style={styles.developmentModeText}>
-                Development mode is enabled: your app will be slower but you can use useful development
-        tools. {learnMoreButton}
-            </Text>
-        );
-    } else {
-        return (
-            <Text style={styles.developmentModeText}>
-                You are not in development mode: your app will run at full speed.
-            </Text>
-        );
-    }
-}
-
-function handleLearnMorePress() {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/workflow/development-mode/');
-}
 
 const styles = StyleSheet.create({
     container: {

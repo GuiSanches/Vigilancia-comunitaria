@@ -8,10 +8,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
+import LinksScreen from './screens/LinksScreen';
+import HomeScreen from './screens/HomeScreen';
 
 const Stack = createStackNavigator();
 
+
+
 export default function App(props) {
+  const [isLoggedIn, setLoggedIn] = React.useState(false);
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
@@ -43,7 +48,7 @@ export default function App(props) {
         SplashScreen.hide();
       }
     }
-
+    setLoggedIn(true);
     loadResourcesAndDataAsync();
   }, []);
 
@@ -55,7 +60,14 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
+            {isLoggedIn ? (
+              <Stack.Screen name="Root" component={BottomTabNavigator} />
+            ) : (
+                <>
+                  <Stack.Screen name="Home" component={HomeScreen} />
+                  <Stack.Screen name="Settings" component={LinksScreen} />
+                </>
+              )}
           </Stack.Navigator>
         </NavigationContainer>
       </View>
