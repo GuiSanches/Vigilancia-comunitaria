@@ -1,4 +1,4 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -6,6 +6,8 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import LoginScreen from '../screens/LoginScreen';
 import FeedScreen from '../screens/FeedScreen';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Links';
@@ -15,24 +17,34 @@ export default function BottomTabNavigator({ navigation, route }) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({ headerTitle: getHeaderTitle(route), headerShown: false });
-
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+    <BottomTab.Navigator
+      initialRouteName={INITIAL_ROUTE_NAME}
+      tabBarOptions={{
+        showLabel: false,
+        activeTintColor: '#F8F8F8',
+        inactiveTintColor: '#586589',
+        style: {
+          backgroundColor: '#8e2e9c'
+        },
+        tabStyle: {}
+      }}
+    >
+      <BottomTab.Screen
+        name="Links"
+        component={LinksScreen}
+        options={{
+          title: 'livrinho',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+        }}
+      />
       <BottomTab.Screen
         name="Home"
         component={FeedScreen}
         options={{
           title: 'Feed',
           headerShown: true,
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Links"
-        component={LinksScreen}
-        options={{
-          title: 'Resources',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />
         }}
       />
       <BottomTab.Screen
@@ -40,12 +52,23 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={LoginScreen}
         options={{
           title: 'Login',
-         tabBarVisible: false,
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          tabBarVisible: false,
+          tabBarIcon: ({ focused }) => <FontAwesome name="user-o" size={24} color="#fafafa" />,
         }}
       />
     </BottomTab.Navigator>
+
   );
+}
+
+const styles = {
+  bottom: {
+    backgroundColor: 'pink'
+  },
+  menu: {
+    backgroundColor: 'purple',
+    borderWidth: 1
+  },
 }
 
 function getHeaderTitle(route) {

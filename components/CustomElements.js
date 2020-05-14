@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 
 export const CustomText = props => {
@@ -24,10 +24,14 @@ export const CustomTextInput = props => {
 }
 
 export const CustomButton = props => {
-  const {style, textStyle, title, children,...otherProps} = props
+  const {style, textStyle, title, children, isDisabled, ...otherProps} = props
+  const [SisDisabled, setDisabled] = React.useState(isDisabled)
 
+  useEffect( _ => {
+    setDisabled(isDisabled)
+  })
   return (
-    <TouchableOpacity style={styles.button} {...otherProps}>
+    <TouchableOpacity disabled={SisDisabled} style={{...styles.button, ...(isDisabled ? styles.disabled : {}) }} {...otherProps}>
       <CustomText bold={true} style={{color: 'white', fontSize: 16, textAlign: 'center', lineHeight: 15,textAlignVertical: 'center',...textStyle}} >
         {title ? title : children}
       </CustomText>
@@ -46,6 +50,9 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     alignSelf: 'center',
     justifyContent: 'center',
+  },
+  disabled: {
+    backgroundColor: '#9290B3'
   },
   textInput: {
     borderRadius: 25,

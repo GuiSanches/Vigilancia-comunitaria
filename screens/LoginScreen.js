@@ -19,11 +19,20 @@ const VALID_PASSWORD = "";
 const LoginScreen = props => {
     const { navigation } = props;
 
+    const verificar = () => {
+        if (email != '') {
+            <Navigator />
+        }
+        else {
+            Alert.alert('erro')
+        }
+    }
+
     const [email, setEmail] = React.useState(VALID_EMAIL);
     const [password, setPassword] = React.useState(VALID_PASSWORD);
     const [errors, setErrors] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
-    const [botaoLogarDesativado, setBotaoLogarDesativado] = React.useState(false)
+    const [botaoLogarDesativado, setBotaoLogarDesativado] = React.useState(true)
     // const { signIn } = React.useContext(AuthCtx)
 
     const handleLogin = _ => {
@@ -36,8 +45,22 @@ const LoginScreen = props => {
         if (email !== VALID_EMAIL) errors.push("email");
         if (password !== VALID_PASSWORD) errors.push("password");
 
+        if (errors.length > 0) Alert.alert('erro')
         setErrors(errors)
         setLoading(false)
+    }
+
+    React.useEffect(_ => {
+        if (email.length > 0 && password.length > 0) setBotaoLogarDesativado(false)
+        else setBotaoLogarDesativado(true)
+    })
+
+    const updateEmail = email => {
+        setEmail(email)        
+    }
+
+    const updatePassword = password => {
+        setPassword(password)
     }
 
     const logar = props => {
@@ -46,13 +69,12 @@ const LoginScreen = props => {
     }
 
     const hasErrors = key => (errors.includes(key) ? styles.hasErrors : null);
-    console.log(CustomText)
     return (
         <KeyboardAvoidingView style={styles.container}>
-            <ImageBackground source={require('../assets/logo/comidas.png')} style={[styles.image]}>
+            <ImageBackground source={require('../assets/images/login-bg.png')} style={[styles.image]}>
 
                 <CustomTextInput
-                    onChangeText={text => setEmail(text)}
+                    onChangeText={updateEmail}
                     value={email}
                     textContentType="emailAddress"
                     type="emailAddress"
@@ -60,7 +82,7 @@ const LoginScreen = props => {
                     placeholder="Email"
                 />
                 <CustomTextInput
-                    onChangeText={text => setPassword(text)}
+                    onChangeText={updatePassword}
                     value={password}
                     secureTextEntry={true}
                     textContentType="password"
@@ -68,20 +90,17 @@ const LoginScreen = props => {
                     style={{ ...styles.input, marginBottom: 25 }}
                     placeholder="Senha"
                 />
-                <CustomButton disabled={botaoLogarDesativado}
+                <CustomButton isDisabled={botaoLogarDesativado}
                     onPress={() => logar(props)} title="Entrar" />
                 <CustomText onPress={() => props.navigation.navigate('Links')}
                     style={styles.opcoesFinais}>
                     Esqueceu a senha?
                 </CustomText>
-                <CustomText onPress={() => props.navigation.navigate('Links')} 
-                style={styles.opcoesFinais}>
+                <CustomText onPress={() => props.navigation.navigate('Links')}
+                    style={styles.opcoesFinais}>
                     Criar uma nova conta
                 </CustomText>
             </ImageBackground>
-            {/* <View style={styles.logo_container}>
-                <Image style={styles.comidas} source={require('../assets/logo/comidas.png')} />
-            </View> */}
 
         </KeyboardAvoidingView>
     );
@@ -138,7 +157,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 15,
     },
-    comidas: {
+    imageBg: {
         width: '100%',
         height: 70,
         resizeMode: "cover",

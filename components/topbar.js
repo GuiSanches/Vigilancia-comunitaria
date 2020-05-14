@@ -6,15 +6,16 @@ import {
     ToolbarAndroid,
     Image,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import logo from '../assets/images/logo-icon.png'
 
 const Topbar = props => {
 
     return (
         <View style={styles.container}>
-            <Text>Left</Text>
-            <Image style={styles.logo} source={logo}/>
-            <Text>Right</Text>
+            <Ionicons name="md-menu" size={24} color="white" />
+            <Image style={styles.logo} source={logo} />
+            <Ionicons name="md-help-circle-outline" size={24} color="white" />
         </View>
     )
 }
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         width: 55,
         height: 52,
-    },  
+    },
     container: {
         alignSelf: 'stretch',
         position: 'relative',
@@ -36,8 +37,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#A53DB5',
         alignItems: 'center',
         justifyContent: 'space-between', // center, space-around
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
         elevation: 7
     }
 });

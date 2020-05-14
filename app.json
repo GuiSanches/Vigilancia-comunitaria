@@ -24,6 +24,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "Gardier, vigilância comunitária no seu bolso"
   }
 }
