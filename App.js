@@ -14,13 +14,22 @@ import HomeScreen from './screens/HomeScreen';
 const Stack = createStackNavigator();
 
 
-
 export default function App(props) {
   const [isLoggedIn, setLoggedIn] = React.useState(false);
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
+  const firebaseConfig = {
+    apiKey: "AIzaSyAtXoXx1zUPI_POXU0OI10Vp5YvFIe7dIs",
+    authDomain: "project-id.firebaseapp.com",
+    databaseURL: "https://gardier.firebaseio.com",
+    projectId: "gardier",
+    storageBucket: "gardier.appspot.com",
+    messagingSenderId: "sender-id",
+    appId: "1:436696195305:android:8a45742523cea06f1fd078",
+    measurementId: "G-measurement-id"
+  };
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
@@ -30,7 +39,7 @@ export default function App(props) {
 
         // Load our initial navigation state
         setInitialNavigationState(await getInitialState());
-
+        firebase.initializeApp(firebaseConfig);
         // Load fonts
         await Font.loadAsync({
           'ubuntu': require('./assets/fonts/ubuntu/Ubuntu-Regular.ttf'),
