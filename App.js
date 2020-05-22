@@ -10,9 +10,9 @@ import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 import LinksScreen from './screens/LinksScreen';
 import HomeScreen from './screens/HomeScreen';
+import Firebase, { FirebaseProvider } from "./config/Firebase";
 
 const Stack = createStackNavigator();
-
 
 export default function App(props) {
   const [isLoggedIn, setLoggedIn] = React.useState(false);
@@ -20,26 +20,14 @@ export default function App(props) {
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
-  const firebaseConfig = {
-    apiKey: "AIzaSyAtXoXx1zUPI_POXU0OI10Vp5YvFIe7dIs",
-    authDomain: "project-id.firebaseapp.com",
-    databaseURL: "https://gardier.firebaseio.com",
-    projectId: "gardier",
-    storageBucket: "gardier.appspot.com",
-    messagingSenderId: "sender-id",
-    appId: "1:436696195305:android:8a45742523cea06f1fd078",
-    measurementId: "G-measurement-id"
-  };
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHide();
-
         // Load our initial navigation state
         setInitialNavigationState(await getInitialState());
-        firebase.initializeApp(firebaseConfig);
         // Load fonts
         await Font.loadAsync({
           'ubuntu': require('./assets/fonts/ubuntu/Ubuntu-Regular.ttf'),
@@ -65,21 +53,23 @@ export default function App(props) {
     return null;
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <Stack.Navigator>
-            {isLoggedIn ? (
-              <Stack.Screen name="Root" component={BottomTabNavigator} />
-            ) : (
-                <>
-                  <Stack.Screen name="Home" component={HomeScreen} />
-                  <Stack.Screen name="Settings" component={LinksScreen} />
-                </>
-              )}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+      <FirebaseProvider value={Firebase}>
+        <View style={styles.container}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
+            <Stack.Navigator>
+              {isLoggedIn ? (
+                <Stack.Screen name="Root" component={BottomTabNavigator} />
+              ) : (
+                  <>
+                    <Stack.Screen name="Home" component={HomeScreen} />
+                    <Stack.Screen name="Settings" component={LinksScreen} />
+                  </>
+                )}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
+      </FirebaseProvider>
     );
   }
 }

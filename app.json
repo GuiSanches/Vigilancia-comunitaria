@@ -23,8 +23,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "example.expo.googlesignin",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.436696195305-p6uo8fsp92vpkugce7j3i0piojvtifvb"
+        }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
+    "android": {
+      "package": "com.example.test",
+      "googleServicesFile": "./google-services.json"
+    }
+    ,
     "description": "Gardier, vigilância comunitária no seu bolso"
   }
 }
