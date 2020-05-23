@@ -7,6 +7,7 @@
       "android",
       "web"
     ],
+    "privacy": "public",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -24,7 +25,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "example.expo.googlesignin",
+      "bundleIdentifier": "com.example.ios",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.436696195305-p6uo8fsp92vpkugce7j3i0piojvtifvb"

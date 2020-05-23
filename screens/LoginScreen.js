@@ -6,7 +6,8 @@ import {
     ToastAndroid,
     ImageBackground,
     AsyncStorage,
-    Button
+    Button,
+    Alert
 } from 'react-native';
 import * as theme from "../constants/Theme.js";
 import {
@@ -16,6 +17,8 @@ import {
 } from "../components/CustomElements";
 import { withFirebaseHOC } from "../config/Firebase";
 import * as AppAuth from 'expo-app-auth';
+import * as Google from 'expo-google-app-auth';
+import * as GoogleSignIn from 'expo-google-sign-in';
 
 const VALID_EMAIL = "";
 const VALID_PASSWORD = "";
@@ -36,39 +39,31 @@ const LoginScreen = (props) => {
     const [errors, setErrors] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [botaoLogarDesativado, setBotaoLogarDesativado] = React.useState(true)
-    const [authState, setAuthState] = React.useState(null);
-    // const { signIn } = React.useContext(AuthCtx)
+    const [authState, setAuthState] = React.useState(null);=
 
     const handleOnLogin = async _ => {
         try {
-            await firebase.loginWithGoogle();
-            // consol.log(response)
-            // const response = await firebase.loginWithEmail(email, password);
+            const response = await firebase.loginWithEmail(email, password);
+            console.log(response)
 
-
-            // if (response.user) {
-            //     navigation.navigate("Home");
-            // }
+            if (response.user) {
+                Alert.alert(`Bem vindo ${response.user.email}`)
+                navigation.navigate("Home");
+            } else {
+                console.log('oi')
+            }
         } catch (error) {
-            Alert.alert('error', error)
+            Alert.alert('error', error.message)
             //actions.setFieldError("general", error.message);
         } finally {
-            Alert.alert('submit')
+            // Alert.alert('submit')
             // actions.setSubmitting(false);
         }
     }
 
-    const GoogleT = async _ => {
-        const { type, accessToken, user } = await Google.logInAsync({
-            webClientId: '436696195305-21vpjk41ncuf62aso7r8rr1kvj52dco8.apps.googleusercontent.com'
-        });
-
-        if (type === 'success') {
-            // Then you can use the Google REST API
-            let userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            });
-        }
+    const handleLoginGoogle = async _ => {
+        const response = firebase.loginWithGoogle()
+        console.log(response)
     }
 
     React.useEffect(_ => {
@@ -122,10 +117,7 @@ const LoginScreen = (props) => {
                 </CustomText>
                 <Button
                     title="Sign In with Google "
-                    onPress={async () => {
-                        const _authState = await signInAsync();
-                        setAuthState(_authState);
-                    }}
+                    onPress={async () => handleLoginGoogle()}
                 />
             </ImageBackground>
 

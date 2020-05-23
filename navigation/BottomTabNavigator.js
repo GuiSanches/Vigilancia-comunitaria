@@ -8,7 +8,6 @@ import LoginScreen from '../screens/LoginScreen';
 import FeedScreen from '../screens/FeedScreen';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import AuthScreen from '../screens/AuthScreen'
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Login';
@@ -44,15 +43,6 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={FeedScreen}
         options={{
           title: 'Feed',
-          headerShown: true,
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />
-        }}
-      />
-      <BottomTab.Screen
-        name="Google"
-        component={AuthScreen}
-        options={{
-          title: 'Google',
           headerShown: true,
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />
         }}
