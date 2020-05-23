@@ -56,6 +56,9 @@ const FeedScreen = props => {
         setRefreshing(false)
     }
 
+    React.useEffect(_ => {
+        
+    })
     return (
         <View style={{flex: 1, paddingTop: 0}}>
             <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />

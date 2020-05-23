@@ -16,41 +16,27 @@ import {
     CustomButton
 } from "../components/CustomElements";
 import { withFirebaseHOC } from "../config/Firebase";
-import * as AppAuth from 'expo-app-auth';
-import * as Google from 'expo-google-app-auth';
-import * as GoogleSignIn from 'expo-google-sign-in';
 
 const VALID_EMAIL = "";
 const VALID_PASSWORD = "";
 const LoginScreen = (props) => {
     const { navigation, firebase } = props;
 
-    const verificar = () => {
-        if (email != '') {
-            <Navigator />
-        }
-        else {
-            Alert.alert('erro')
-        }
-    }
-
     const [email, setEmail] = React.useState(VALID_EMAIL);
     const [password, setPassword] = React.useState(VALID_PASSWORD);
     const [errors, setErrors] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [botaoLogarDesativado, setBotaoLogarDesativado] = React.useState(true)
-    const [authState, setAuthState] = React.useState(null);=
+    const [authState, setAuthState] = React.useState(null);
 
     const handleOnLogin = async _ => {
         try {
             const response = await firebase.loginWithEmail(email, password);
-            console.log(response)
 
             if (response.user) {
                 Alert.alert(`Bem vindo ${response.user.email}`)
                 navigation.navigate("Home");
             } else {
-                console.log('oi')
             }
         } catch (error) {
             Alert.alert('error', error.message)
@@ -63,7 +49,6 @@ const LoginScreen = (props) => {
 
     const handleLoginGoogle = async _ => {
         const response = firebase.loginWithGoogle()
-        console.log(response)
     }
 
     React.useEffect(_ => {
@@ -78,12 +63,6 @@ const LoginScreen = (props) => {
         setPassword(password)
     }
 
-    const logar = props => {
-        ToastAndroid.show('Logado com sucesso!', ToastAndroid.LONG);
-        props.navigation.navigate('Home')
-    }
-
-    const hasErrors = key => (errors.includes(key) ? styles.hasErrors : null);
     return (
         <KeyboardAvoidingView style={styles.container}>
             <ImageBackground source={require('../assets/images/login-bg.png')} style={[styles.image]}>
