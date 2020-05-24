@@ -16,7 +16,7 @@ import {
 import FeedCard from '../components/FeedCard';
 import gatao from '../assets/images/gatao.jpeg'
 import Topbar from '../components/topbar';
-
+import { withFirebaseHOC } from "../config/Firebase";
 const VALID_EMAIL = "";
 const VALID_PASSWORD = "";
 
@@ -37,7 +37,7 @@ const data = Array.from({
 }, _ => postTemplate)
 
 const FeedScreen = props => {
-    const { navigation } = props;
+    const { navigation, firebase } = props;
     const [isRefreshing, setRefreshing] = React.useState(false)
     const [posts, setPosts] = React.useState(data.slice(0, 5))
 
@@ -55,10 +55,7 @@ const FeedScreen = props => {
         setPosts(data.slice(0, 5))
         setRefreshing(false)
     }
-
-    React.useEffect(_ => {
-        
-    })
+    
     return (
         <View style={{flex: 1, paddingTop: 0}}>
             <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />
@@ -79,7 +76,7 @@ const FeedScreen = props => {
     )
 }
 
-export default FeedScreen
+export default withFirebaseHOC(FeedScreen)
 
 /* LoginScreen.navigationOptions = {
     header: null,

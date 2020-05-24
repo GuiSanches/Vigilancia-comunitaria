@@ -2,12 +2,14 @@ import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/b
 import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
+import { AlertIcon } from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import LoginScreen from '../screens/LoginScreen';
 import FeedScreen from '../screens/FeedScreen';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import AlertScreen from '../screens/AlertScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Login';
@@ -48,12 +50,22 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
+        name="Alerta"
+        component={AlertScreen}
+        options={{
+          title: 'alerta',
+          headerShown: true,
+          tabBarVisible: false,
+          tabBarIcon: ({ focused }) => <AlertIcon focused={focused} name="md-home" />
+        }}
+      />
+      <BottomTab.Screen
         name="Login"
         component={LoginScreen}
         options={{
           title: 'Login',
           tabBarVisible: false,
-          tabBarIcon: ({ focused }) => <FontAwesome name="user-o" size={24} color="#fafafa" />,
+          tabBarIcon: ({ focused }) => <FontAwesome name="user-o" size={24} color="#ccc" />,
         }}
       />
     </BottomTab.Navigator>

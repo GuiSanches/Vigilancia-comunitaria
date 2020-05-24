@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as React from 'react';
 
 import Colors from '../constants/Colors';
@@ -13,3 +13,12 @@ export default function TabBarIcon(props) {
     />
   );
 }
+
+export function AlertIcon(props) {
+  return (
+    <MaterialCommunityIcons
+      name="bell-alert-outline"
+      size={28}
+      color={props.focused ? Colors.tabIconSelected : Colors.tabIconDefault} />
+  )
+} 
