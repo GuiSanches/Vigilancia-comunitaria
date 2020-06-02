@@ -36,8 +36,7 @@
     "android": {
       "package": "com.example.test",
       "googleServicesFile": "./google-services.json"
-    }
-    ,
+    },
     "description": "Gardier, vigilância comunitária no seu bolso"
   }
 }

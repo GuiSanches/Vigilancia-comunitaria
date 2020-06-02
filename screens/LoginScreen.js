@@ -95,7 +95,7 @@ const LoginScreen = (props) => {
                     Criar uma nova conta
                 </CustomText>
                 <Button
-                    title="Sign In with Google "
+                    title="Logar com Google "
                     onPress={async () => handleLoginGoogle()}
                 />
             </ImageBackground>

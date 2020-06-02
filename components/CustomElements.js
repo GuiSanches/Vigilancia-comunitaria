@@ -24,14 +24,58 @@ export const CustomTextInput = props => {
 }
 
 export const CustomTextInputWithImg = props => {
-  const { Icon } = props
+  const { Icon, setContent } = props
+  const [value, setValue] = React.useState()
+
+  const updateValue = v => {
+    setValue(v)
+    setContent(v)
+  }
   return (
     <View style={styles.CustomTextInputWithImg}>
       <View style={styles.CustomTextInputImg}>
         <Icon styles={{ textAlign: 'center' }} />
       </View>
 
-      <TextInput style={styles.CustomTextInputWithImgImput} placeholder={props.placeholder} />
+      <TextInput multiline={true} onChangeText={updateValue} value={value} style={styles.CustomTextInputWithImgImput} placeholder={props.placeholder} />
+    </View>
+  )
+}
+
+export const CustomAreaInputWithImg = props => {
+  const { Icon } = props
+  const defaultRadius = styles.CustomTextInputWithImg.borderRadius
+  const [isMultiline_, setMultiline_] = React.useState(false)  
+  const [height_, setHeight_] = React.useState(200)
+  const [borderRadius_, setBorderRadius_] = React.useState(defaultRadius)
+
+  const handleFocus = _ => {
+    setMultiline_(true)
+    setBorderRadius_(12)
+  }
+
+  const handleBlur = _ => {
+    setMultiline_(false)
+    setBorderRadius_(defaultRadius)
+  }
+
+  const newStyle = { borderRadius: borderRadius_, height: height_, textAlignVertical: 'top', paddingTop: 5, alignItems: 'flex-start' }
+  
+  return (
+    <View style={[styles.CustomTextInputWithImg, newStyle]}>
+      {isMultiline_ ? null : (
+        <View style={styles.CustomTextInputImg}>
+          <Icon styles={{ textAlign: 'center' }} />
+        </View>)}
+
+
+      <TextInput
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        multiline={isMultiline_}
+        style={[styles.CustomTextInputWithImgImput, newStyle]}
+        placeholder={props.placeholder}
+      />
     </View>
   )
 }
@@ -86,10 +130,12 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     color: 'white',
     width: 240,
-    height: 35
+    minHeight: 35,
+    maxHeight: 220
   },
   CustomTextInputWithImgImput: {
-    height: 35,
+    minHeight: 35,
+    maxHeight: 220,
     borderRadius: 25,
     // borderColor: 'grey',
     // borderWidth: 0.7,
