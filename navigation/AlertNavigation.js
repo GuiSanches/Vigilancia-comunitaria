@@ -16,9 +16,9 @@ const AlertNavigator = ({ navigation, route }) => {
           backgroundColor: '#8e2e9c'
         },
         tabStyle: {},
-        mode: 'modal',
       }}
       screenOptions={{
+        headerShown: false,
         gestureEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators
           .forHorizontalIOS

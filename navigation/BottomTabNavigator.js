@@ -22,7 +22,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({
     headerTitle: getHeaderTitle(route), 
-    headerShown: true,
+    headerShown: false,
     gestureEnabled: true,
     gestureDirection: 'horizontal'
   });
@@ -40,6 +40,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         mode: 'modal',
       }}
       screenOptions={{
+        headerShown: false,
         gestureEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators
         .forModalPresentationIOS
@@ -61,7 +62,6 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={FeedScreen}
         options={{
           title: 'Feed',
-          headerShown: true,
           gestureEnabled: true,
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
           animationEnabled: true,
@@ -74,7 +74,6 @@ export default function BottomTabNavigator({ navigation, route }) {
         options={{
           title: 'alerta',
           gestureEnabled: true,
-          headerShown: true,
           tabBarVisible: false,
           tabBarIcon: ({ focused }) => <AlertIcon focused={focused} name="md-home" />
         }}

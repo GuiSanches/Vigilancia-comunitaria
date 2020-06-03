@@ -5,12 +5,13 @@ import {
     View,
     StatusBar,
     TouchableOpacity,
-    Picker
+    Picker,
+    KeyboardAvoidingView
 } from 'react-native';
 import Topbar from '../components/topbar';
 import { withFirebaseHOC } from "../config/Firebase";
 import { LinearGradient } from 'expo-linear-gradient';
-import { SimpleLineIcons, MaterialCommunityIcons, EvilIcons } from '@expo/vector-icons';
+import { SimpleLineIcons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 
 import {
     AlertRoundImg,
@@ -18,6 +19,9 @@ import {
     AlertAreaInput,
     AlertStatusForm,
     AlertDropdown,
+    AlertDate,
+    AlertTime,
+    AlertAnonymousBTN
 } from '../components/AlertCustomElements'
 
 import AlertMap from '../components/AlertMap'
@@ -49,32 +53,29 @@ const AlertLayoutScreen = props => {
                     }}
                 />
                 {children}
-                <AlertStatusForm PagesLen={3} currPage={name} navigate={navigation.navigate} />
-                <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
-                    <Text style={styles.back}>Voltar</Text>
-                </TouchableOpacity>
             </View>
         </View>
     )
 }
 
 const Page1 = props => {
-    const { navigation, firebase, children } = props;
+    const { firebase, children } = props;
+    const { navigation, route: { name } } = props
     const [location, setLocation] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
 
     const idx = parseInt(props.route.name.slice(-1)) + 1
     React.useEffect(() => {
         (async () => {
-          let { status } = await Location.requestPermissionsAsync();
-          if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-          }
-    
-          let location = await Location.getCurrentPositionAsync({});
-          setLocation(location);
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            setLocation(location);
         })();
-      });
+    });
     return (
         <View style={styles.AlertContainer}>
             <AlertRoundImg />
@@ -95,33 +96,52 @@ const Page1 = props => {
 
                     <CustomButton
                         style={styles.AlertButton}
-                        onPress={_ => props.navigation.navigate(`Alert-${idx}`, {location})} title="Próximo" />
+                        onPress={_ => props.navigation.push(`Alert-${idx}`, { location })} title="Próximo" />
+
                 </View>
+            </View>
+
+            <View style={styles.teste}>
+                <AlertStatusForm PagesLen={2} currPage={name} navigate={navigation.navigate} />
+                <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
+                    <Text style={styles.back}>Voltar</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
 }
 
 const Page2 = props => {
+    const { navigation, route: { name } } = props
     return (
-        <View style={styles.AlertContainer}>
+        <KeyboardAvoidingView style={styles.AlertContainer}>
             <View style={styles.AlertBox}>
 
-                <View style={styles.AlertForm}>
+                <KeyboardAvoidingView style={styles.AlertForm}>
                     <AlertDropdown label={"Selecione a gravidade do ocorrido"} arrElements={['Alta', 'Média', 'Baixa', 'Muito Baixa']} />
-
-                    <AlertMap/>
-
+                    <AlertMap />
+                    <AlertDate label={"Quando ocorreu?"} />
+                    <AlertTime
+                        Icon={({ styles }) => <Feather name="clock" size={18} color="black" style={styles} />}
+                        label={"Em que horário, mais ou menos?"} />
+                    <AlertAnonymousBTN
+                    label={"Publicar em modo anonimo"}
+                    setAnonymous={_ => {}} />
                     <CustomButton
                         style={styles.AlertButton}
-                        onPress={_ => props.navigation.navigate(`Alert-${idx}`)} title="Próximo" />
-                </View>
+                        onPress={_ => props.navigation.navigate(`Home`)} title="Criar Alerta" />
+
+                </KeyboardAvoidingView>
             </View>
-        </View>
+            <View style={styles.teste}>
+                <AlertStatusForm PagesLen={2} currPage={name} navigate={navigation.navigate} />
+                <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.pop()}>
+                    <Text style={styles.back}>Voltar</Text>
+                </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
     )
 }
-
-
 
 const AlertPage1 = props => {
     return (
@@ -153,7 +173,7 @@ const styles = StyleSheet.create({
     },
     AlertContainer: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center',
     },
     AlertBox: {
@@ -172,7 +192,7 @@ const styles = StyleSheet.create({
         width: 240,
     },
     AlertButton: {
-        marginTop: 17,
+        marginTop: 30,
         width: 240,
     },
     BackBtn: {
@@ -182,5 +202,8 @@ const styles = StyleSheet.create({
     back: {
         color: 'white',
         textAlign: 'center',
+    },
+    teste: {
+        // marginTop: 30,
     }
 })

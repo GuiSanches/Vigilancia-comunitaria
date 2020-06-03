@@ -8,14 +8,17 @@ import {
     Picker
 } from 'react-native';
 import {
-    CustomButton,
+    CustomMiniInput,
     CustomTextInputWithImg,
     CustomAreaInputWithImg
 } from "./CustomElements";
 import { LinearGradient } from 'expo-linear-gradient';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { SimpleLineIcons, MaterialCommunityIcons, EvilIcons, AntDesign, Feather, Entypo } from '@expo/vector-icons';
 import megafone from '../assets/images/alert-img.jpg'
-
+import { TextInput } from 'react-native-gesture-handler';
+import { CheckBox } from 'react-native-elements';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 export const AlertInput = ({ label, placeholder, Icon, setContent }) => {
     return (
@@ -60,7 +63,7 @@ export const AlertStatusForm = ({ PagesLen, currPage, navigate }) => {
         for (let i = 0; i < PagesLen; i++) {
             let element = (
                 <TouchableOpacity
-                onPress={_ => navigate(`Alert-${i + 1}`)}
+                    onPress={_ => navigate(`Alert-${i + 1}`)}
                     key={`Alert-${i}`}
                     style={[styles.AlertCircle,
                     { width: circleRadius, height: circleRadius },
@@ -75,6 +78,7 @@ export const AlertStatusForm = ({ PagesLen, currPage, navigate }) => {
             </View>
         )
     }
+
     return (
         <View style={styles.AlertCirclesBox}>
             {generateCurrPage(PagesLen, idx)}
@@ -103,6 +107,86 @@ export const AlertDropdown = ({ arrElements, label }) => {
                 <AntDesign name="down" size={24} color="black" />
             </View>
         </View>
+    )
+}
+
+export const AlertDate = ({ label }) => {
+    const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+    const getDayIdx = _ => 5
+    const [curr, setCurr] = React.useState(months[getDayIdx()])
+
+    return (
+        <View style={{marginTop: 5}}>
+            <Text style={styles.AlertInputLabel}>{label}</Text>
+            <View style={styles.AlertDate}>
+                <CustomMiniInput label={"Dia"} />
+                <View style={[styles.AlertDropdownBox, styles.AlertDropdownDateBox]}>
+                    <Picker
+                        selectedValue={curr}
+                        style={[styles.AlertDropdown, styles.AlertDropdownDate]}
+                        onValueChange={(itemValue, itemIndex) => setCurr(itemValue)}>
+                        {months.map(label => (
+                            <Picker.Item key={label} label={label} value={label} />
+                        ))}
+                    </Picker>
+                </View>
+
+            </View>
+        </View>
+    )
+}
+
+export const AlertTime = ({ label, Icon }) => {
+
+    return (
+        <View style={styles.AlertTimeContainer}>
+            <Text style={styles.AlertInputLabel}>{label}</Text>
+            <View style={styles.AlertTime}>
+                <View style={styles.AlertTimeIcon}>
+                    <Icon styles={{ textAlign: 'center' }} />
+                </View>
+                <TextInput style={{ color: 'white' }} placeholder={"Horario"} />
+            </View>
+        </View>
+
+    )
+}
+
+export const AlertAnonymousBTN = ({ setAnonymous, label }) => {
+    const [checked, setChecked] = React.useState(true)
+
+    const CheckWrapper = ({ selected, onPress, style, textStyle, size = 30, color = '#211f30', text = '', ...props }) => (
+        <TouchableOpacity style={[styles.checkBox, style]} onPress={onPress} {...props}>
+            <Icon
+                size={size}
+                color={color}
+                name={selected ? 'check-box' : 'check-box-outline-blank'}
+            />
+
+            <Text style={textStyle}> {text} </Text>
+        </TouchableOpacity>
+    )
+
+    return (
+        <View>
+            <View style={styles.item} >
+                <CheckBox 
+                checked={checked} 
+                color="#fc5185" 
+                checkedIcon='dot-circle-o'
+                uncheckedIcon='circle-o'
+                onPress={() => setChecked(!checked)} />
+                <Text style={
+                    {
+                        ...styles.checkBoxTxt,
+                        color: checked ? "#fc5185" : "gray",
+                        fontWeight: checked ? "bold" : "normal"
+                    }}
+                >{label}</Text>
+            </View>
+
+        </View>
+
     )
 }
 
@@ -163,7 +247,7 @@ const styles = StyleSheet.create({
         width: 240,
         height: 35,
         alignItems: 'center',
-        paddingLeft: 17,
+        paddingLeft: 12,
         borderRadius: 100,
     },
     AlertDropdownIcon: {
@@ -181,13 +265,62 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         height: 30
     },
+    AlertDate: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        // borderWidth: 1
+    },
+    AlertDropdownDateBox: {
+        width: 150,
+        paddingLeft: 15,
+    },
+    AlertDropdownDate: {
+        width: 126
+    },
     AlertItem: {
         borderRadius: 100,
         height: 300,
+    },
+    AlertTimeContainer: {
+        alignItems: 'center',
+        marginTop: 11
+    },
+    AlertTime: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 25,
+        backgroundColor: '#9F91B5',
+        paddingLeft: 5,
+        color: 'white',
+        width: 100,
+        minHeight: 35,
+        maxHeight: 220
+    },
+    AlertTimeIcon: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 27,
+        height: 26,
+        paddingHorizontal: 0,
+        paddingVertical: 2,
+        marginRight: 5,
+        borderRadius: 100,
+        backgroundColor: 'white'
     },
     Teste: {
         color: 'white',
         justifyContent: 'center',
         textAlign: 'center'
-    }
+    },
+    item:{
+        width:"80%",
+        alignItems: 'center',
+        borderRadius:20,
+        padding: 0,
+        marginBottom:10,
+        flexDirection:"row",
+      },
+      checkBoxTxt:{
+        marginLeft: -25
+      },
 })

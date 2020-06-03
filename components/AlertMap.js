@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as Location from 'expo-location';
-import MapView from 'react-native-maps';
+import MapView, { Animated, Circle } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 
 import {View} from 'react-native';
 
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, EvilIcons } from '@expo/vector-icons';
 
 import {AlertInput} from '../components/AlertCustomElements'
 
@@ -14,6 +14,7 @@ const AlertMap = ({ location }) => {
     const [mapRegion, setMapRegion] = React.useState(null)
     const [marker, setMarker] = React.useState(null)
     const [street, setStreet] = React.useState()
+    const mapRef = React.createRef()
 
     React.useEffect(() => {
         (async () => {
@@ -28,8 +29,8 @@ const AlertMap = ({ location }) => {
             setMapRegion({
                 latitude: location_.coords.latitude,
                 longitude: location_.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005
             })
 
             setMarker({
@@ -62,8 +63,8 @@ const AlertMap = ({ location }) => {
                     latitude: arrAddress[0].latitude,
                     longitude: arrAddress[0].longitude,
                 },
-                title: 'Posição atentado',
-                description: 'proximo a'
+                title: 'Localização atentado',
+                description: 'Área do ocorrido'
             })
         }
 
@@ -80,12 +81,15 @@ const AlertMap = ({ location }) => {
                 label={"Aonde aconteceu?"}
                 placeholder={"Local"}
                 setContent={updateMarker}
-                Icon={({ styles }) => <Entypo name="location-pin" size={24} color="black" style={styles} />} />
+                Icon={({ styles }) => <EvilIcons name="location" size={24} color="#211f30" style={styles} />} />
             {mapRegion != null && (
                 <View style={{ borderRadius: 50, borderWidth: 2, overflow: 'hidden', marginTop: 4 }}>
                     <MapView
-                        style={{ alignSelf: 'stretch', height: 260 }}
+                        ref={mapRef}
+                        style={{ alignSelf: 'stretch', height: 250 }}
                         customMapStyle={[{ borderRadius: 0 }]}
+                        minZoom={10}
+                        showsUserLocation={true}
                         region={mapRegion}
                         onRegionChangeComplete={handleMapRegionChange}
                     >
@@ -93,6 +97,11 @@ const AlertMap = ({ location }) => {
                             coordinate={marker.latlng}
                             title={marker.title}
                             description={marker.description}
+                        />
+                        <Circle
+                            center={marker.latlng}
+                            radius={100}
+                            fillColor={'rgba(255, 0, 0, 0.6)'}
                         />
                     </MapView>
                 </View>)}

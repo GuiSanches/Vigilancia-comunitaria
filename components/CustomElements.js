@@ -45,7 +45,7 @@ export const CustomTextInputWithImg = props => {
 export const CustomAreaInputWithImg = props => {
   const { Icon } = props
   const defaultRadius = styles.CustomTextInputWithImg.borderRadius
-  const [isMultiline_, setMultiline_] = React.useState(false)  
+  const [isMultiline_, setMultiline_] = React.useState(false)
   const [height_, setHeight_] = React.useState(200)
   const [borderRadius_, setBorderRadius_] = React.useState(defaultRadius)
 
@@ -60,7 +60,7 @@ export const CustomAreaInputWithImg = props => {
   }
 
   const newStyle = { borderRadius: borderRadius_, height: height_, textAlignVertical: 'top', paddingTop: 5, alignItems: 'flex-start' }
-  
+
   return (
     <View style={[styles.CustomTextInputWithImg, newStyle]}>
       {isMultiline_ ? null : (
@@ -77,6 +77,18 @@ export const CustomAreaInputWithImg = props => {
         placeholder={props.placeholder}
       />
     </View>
+  )
+}
+
+export const CustomMiniInput = props => {
+  let fontFamily = 'ubuntu'
+  if (props.bold) fontFamily += '-bold'
+  if (props.italic) fontFamily += '-italic'
+
+  const { style, label, ...otherProps } = props
+
+  return (
+    <TextInput placeholder={label} style={styles.CustomMiniInput} />
   )
 }
 
@@ -112,6 +124,17 @@ const styles = StyleSheet.create({
   disabled: {
     backgroundColor: '#9290B3'
   },
+  CustomTextInputWithImg: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 25,
+    backgroundColor: '#9F91B5',
+    paddingLeft: 10,
+    color: 'white',
+    width: 240,
+    minHeight: 35,
+    maxHeight: 220
+  },
   CustomTextInputImg: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -121,17 +144,6 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 100,
     backgroundColor: '#fff'
-  },
-  CustomTextInputWithImg: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 25,
-    backgroundColor: '#9F91B5',
-    paddingLeft: 15,
-    color: 'white',
-    width: 240,
-    minHeight: 35,
-    maxHeight: 220
   },
   CustomTextInputWithImgImput: {
     minHeight: 35,
@@ -149,5 +161,16 @@ const styles = StyleSheet.create({
     borderWidth: 0.7,
     color: 'white',
     width: '70%'
+  },
+  CustomMiniInput: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 25,
+    backgroundColor: '#9F91B5',
+    paddingLeft: 15,
+    color: 'white',
+    width: 60,
+    minHeight: 35,
+    maxHeight: 220
   },
 })
