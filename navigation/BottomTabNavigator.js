@@ -28,7 +28,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   });
   return (
     <BottomTab.Navigator
-      // initialRouteName={INITIAL_ROUTzzE_NAME}
+      initialRouteName={INITIAL_ROUTE_NAME}
       tabBarOptions={{
         showLabel: false,
         activeTintColor: '#F8F8F8',

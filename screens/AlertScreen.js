@@ -18,8 +18,9 @@ import {
     AlertAreaInput,
     AlertStatusForm,
     AlertDropdown,
-    AlertMap
 } from '../components/AlertCustomElements'
+
+import AlertMap from '../components/AlertMap'
 
 import {
     CustomButton,
@@ -42,13 +43,13 @@ const AlertLayoutScreen = props => {
                     style={{
                         position: 'absolute',
                         left: 0,
-                        right: 0,
                         top: 0,
+                        right: 0,
                         height: '100%'
                     }}
                 />
                 {children}
-                <AlertStatusForm PagesLen={3} currPage={name} />
+                <AlertStatusForm PagesLen={3} currPage={name} navigate={navigation.navigate} />
                 <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
                     <Text style={styles.back}>Voltar</Text>
                 </TouchableOpacity>
@@ -102,9 +103,6 @@ const Page1 = props => {
 }
 
 const Page2 = props => {
-    const [language, setLanguage] = React.useState('Portuguese')
-    const [location, setLocation] = React.useState(props.route.params.location)
-
     return (
         <View style={styles.AlertContainer}>
             <View style={styles.AlertBox}>
@@ -112,7 +110,7 @@ const Page2 = props => {
                 <View style={styles.AlertForm}>
                     <AlertDropdown label={"Selecione a gravidade do ocorrido"} arrElements={['Alta', 'Média', 'Baixa', 'Muito Baixa']} />
 
-                    <AlertMap location={location}/>
+                    <AlertMap/>
 
                     <CustomButton
                         style={styles.AlertButton}
@@ -149,7 +147,6 @@ export const AlertScreen = withFirebaseHOC(AlertLayoutScreen)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffffff',
         paddingRight: 10,
         paddingLeft: 10,
         backgroundColor: '#7e298b',

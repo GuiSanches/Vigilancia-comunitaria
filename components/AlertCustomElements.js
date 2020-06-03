@@ -15,9 +15,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { SimpleLineIcons, MaterialCommunityIcons, EvilIcons, AntDesign, Feather, Entypo } from '@expo/vector-icons';
 import megafone from '../assets/images/alert-img.jpg'
-import * as Location from 'expo-location';
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+
 
 export const AlertInput = ({ label, placeholder, Icon, setContent }) => {
     return (
@@ -53,20 +51,33 @@ export const AlertRoundImg = props => (
     </View>
 )
 
-export const AlertStatusForm = ({ PagesLen, currPage }) => {
+export const AlertStatusForm = ({ PagesLen, currPage, navigate }) => {
+    const idx = parseInt(currPage.slice(-1)) - 1
+
     const generateCurrPage = (PagesLen, currIdx) => {
-        const CirclesMark = []
         const circleRadius = 15
+        const elementsArr = []
         for (let i = 0; i < PagesLen; i++) {
             let element = (
-                <View style={[styles.AlertCircle, { width: circleRadius, height: circleRadius }]}></View>
+                <TouchableOpacity
+                onPress={_ => navigate(`Alert-${i + 1}`)}
+                    key={`Alert-${i}`}
+                    style={[styles.AlertCircle,
+                    { width: circleRadius, height: circleRadius },
+                    idx == i && { backgroundColor: 'white' }]}></TouchableOpacity>
             )
+            elementsArr.push(element)
         }
+
+        return (
+            <View style={styles.AlertPageStatus}>
+                {elementsArr}
+            </View>
+        )
     }
     return (
         <View style={styles.AlertCirclesBox}>
-            <Text style={styles.Teste}>{currPage}</Text>
-            {/* {generateCurrPage(PagesLen, currPage)} */}
+            {generateCurrPage(PagesLen, idx)}
         </View>
     )
 }
@@ -91,97 +102,6 @@ export const AlertDropdown = ({ arrElements, label }) => {
                 </Picker>
                 <AntDesign name="down" size={24} color="black" />
             </View>
-        </View>
-    )
-}
-
-export const AlertMap = ({ location }) => {
-    const [location_, setLocation] = React.useState(null)
-    const [mapRegion, setMapRegion] = React.useState(null)
-    const [marker, setMarker] = React.useState(null)
-    const [street, setStreet] = React.useState()
-
-    React.useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestPermissionsAsync();
-            let l = await Location.getCurrentPositionAsync({});
-            setLocation(l);
-        })()
-    }, [location]);
-
-    React.useEffect(() => {
-        if (location_ != null && mapRegion == null) {
-            setMapRegion({
-                latitude: location_.coords.latitude,
-                longitude: location_.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-            })
-
-            setMarker({
-                latlng: {
-                    latitude: location_.coords.latitude,
-                    longitude: location_.coords.longitude,
-                },
-                title: 'Posição atentado',
-                description: 'proximo a'
-            })
-        }
-    }, [location_])
-
-    const handleMapRegionChange = mapRegion => {
-        setMapRegion(mapRegion)
-    }
-
-    const handleMarkerAsync = async address => {
-        let arrAddress = await Location.geocodeAsync(address)
-        if (arrAddress.length > 0) {
-            setMapRegion({
-                latitude: arrAddress[0].latitude,
-                longitude: arrAddress[0].longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-            })
-
-            setMarker({
-                latlng: {
-                    latitude: arrAddress[0].latitude,
-                    longitude: arrAddress[0].longitude,
-                },
-                title: 'Posição atentado',
-                description: 'proximo a'
-            })
-        }
-
-    }
-
-    const updateMarker = street => {
-        setStreet(street)
-        handleMarkerAsync(street)
-    }
-
-    return (
-        <View>
-            <AlertInput
-                label={"Aonde aconteceu?"}
-                placeholder={"Local"}
-                setContent={updateMarker}
-                Icon={({ styles }) => <Entypo name="location-pin" size={24} color="black" style={styles} />} />
-            {mapRegion != null && (
-                <View style={{ borderRadius: 50, borderWidth: 2, overflow: 'hidden', marginTop: 4 }}>
-                    <MapView
-                        style={{ alignSelf: 'stretch', height: 260 }}
-                        customMapStyle={[{ borderRadius: 0 }]}
-                        region={mapRegion}
-                        onRegionChangeComplete={handleMapRegionChange}
-                    >
-                        <Marker
-                            coordinate={marker.latlng}
-                            title={marker.title}
-                            description={marker.description}
-                        />
-                    </MapView>
-                </View>)}
         </View>
     )
 }
@@ -222,16 +142,20 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
     },
+    AlertPageStatus: {
+        flexDirection: 'row'
+    },
     AlertCirclesBox: {
+        flexDirection: 'row',
         justifyContent: 'center',
         textAlign: 'center',
         color: 'white',
-        borderWidth: 2
     },
     AlertCircle: {
         borderRadius: 100,
         borderWidth: 1,
-        borderColor: 'white'
+        borderColor: 'white',
+        marginHorizontal: 2
     },
     AlertDropdownBox: {
         backgroundColor: '#A577B4',

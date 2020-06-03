@@ -1,15 +1,6 @@
 import * as React from 'react';
-// import {
-//   createAppContainer,
-//   createSwitchNavigator,
-// } from 'react-navigation';
-import { View, Text, TouchableOpacity, Easing } from 'react-native';
-import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
-// import { createDrawerNavigator } from 'react-navigation-drawer';
-// import { createStackNavigator } from 'react-navigation-stack';
 import { TransitionPresets, CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import {AlertScreen, Alert1, Alert2} from '../screens/AlertScreen';
-import { NavigationContainer } from '@react-navigation/native';
 const AlertStack = createStackNavigator()
 
 const AlertNavigator = ({ navigation, route }) => {
