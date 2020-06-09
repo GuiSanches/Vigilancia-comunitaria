@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
+import DrawerNavigator from './navigation/DrawerNavigation'
 import useLinking from './navigation/useLinking';
 import LinksScreen from './screens/LinksScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -56,10 +57,22 @@ export default function App(props) {
       <FirebaseProvider value={Firebase}>
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
+          <NavigationContainer ref={containerRef} initialState={initialNavigationState}
+            navigationOptions={{
+              header: null,
+              headerVisible: false,
+              tapBarVisible: false
+            }}
+            screenOptions={{
+              headerShown: false,
+              headerVisible: false,
+            }}>
             <Stack.Navigator>
               {isLoggedIn ? (
-                <Stack.Screen name="Root" component={BottomTabNavigator} />
+                <>
+                  {/* <Stack.Screen name="Root" component={BottomTabNavigator} /> */}
+                  <Stack.Screen name="Drawer" component={DrawerNavigator} />
+                </>
               ) : (
                   <>
                     <Stack.Screen name="Home" component={HomeScreen} />

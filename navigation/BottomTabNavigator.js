@@ -1,7 +1,7 @@
 import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 
-import TabBarIcon from '../components/TabBarIcon';
+import TabBarIcon, {TabBarIconMenuEvent} from '../components/TabBarIcon';
 import { AlertIcon } from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
@@ -12,6 +12,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import AlertScreen from '../screens/AlertScreen';
 import { TransitionPresets, CardStyleInterpolators } from '@react-navigation/stack';
 import AlertNavigation from './AlertNavigation';
+import TabBar from '../components/BottomTabBar'
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Login';
@@ -21,7 +22,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({
-    headerTitle: getHeaderTitle(route), 
+    headerTitle: getHeaderTitle(route),
     headerShown: false,
     gestureEnabled: true,
     gestureDirection: 'horizontal'
@@ -39,24 +40,16 @@ export default function BottomTabNavigator({ navigation, route }) {
         tabStyle: {},
         mode: 'modal',
       }}
+      tabBar={props => <TabBar {...props} />}
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators
-        .forModalPresentationIOS
+          .forModalPresentationIOS
       }}
       animation="fade"
       headerMode="float"
     >
-      <BottomTab.Screen
-        name="Links"
-        component={LinksScreen}
-        options={{
-          title: 'livrinho',
-          gestureEnabled: true,
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
-        }}
-      />
       <BottomTab.Screen
         name="Home"
         component={FeedScreen}
@@ -69,13 +62,32 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
+        name="Links"
+        component={LinksScreen}
+        options={{
+          title: 'livrinho',
+          gestureEnabled: true,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+        }}
+      />
+      <BottomTab.Screen
         name="Alerta"
         component={AlertNavigation}
         options={{
           title: 'alerta',
           gestureEnabled: true,
           tabBarVisible: false,
-          tabBarIcon: ({ focused }) => <AlertIcon focused={focused} name="md-home" />
+          outer: true,
+          tabBarIcon: ({ focused }) => <AlertIcon focused={focused} name="md-home" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Eventos"
+        component={LinksScreen}
+        options={{
+          title: 'livrinho',
+          gestureEnabled: true,
+          tabBarIcon: ({ focused }) => <TabBarIconMenuEvent focused={focused} size={27} name="event" />,
         }}
       />
       <BottomTab.Screen

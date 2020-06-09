@@ -35,7 +35,7 @@ const LoginScreen = (props) => {
 
             if (response.user) {
                 Alert.alert(`Bem vindo ${response.user.email}`)
-                navigation.navigate("Home");
+                navigation.navigate("Home");                
             } else {
             }
         } catch (error) {

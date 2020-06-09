@@ -4,6 +4,7 @@ import {
     Text,
     View,
     ToolbarAndroid,
+    TouchableOpacity,
     Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,8 +13,11 @@ import logo from '../assets/images/logo-icon.png'
 const Topbar = props => {
 
     return (
-        <View style={styles.container}>
-            <Ionicons name="md-menu" size={24} color="white" />
+        <View style={[styles.container]}>
+            <TouchableOpacity onPress={e => props.navigation.toggleDrawer()}>
+                <Ionicons name="md-menu" size={24} color="white" />
+            </TouchableOpacity>
+
             <Image style={styles.logo} source={logo} />
             <Ionicons name="md-help-circle-outline" size={24} color="white" />
         </View>

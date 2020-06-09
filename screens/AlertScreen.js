@@ -40,7 +40,7 @@ const AlertLayoutScreen = props => {
     return (
         <View style={{ flex: 1, paddingTop: 0 }}>
             <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />
-            <Topbar />
+            <Topbar {...{navigation}}/>
             <View style={styles.container}>
                 <LinearGradient
                     colors={['transparent', 'rgba(0,0,0,0.8)']}

@@ -57,9 +57,9 @@ const FeedScreen = props => {
     }
     
     return (
-        <View style={{flex: 1, paddingTop: 0}}>
+        <View style={{flex: 1, paddingTop: 0, zIndex: 5}}>
             <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />
-            <Topbar />
+            <Topbar {...{navigation: props.navigation}}/>
             <View style={styles.container}>
                 <FlatList
                     data={posts}
