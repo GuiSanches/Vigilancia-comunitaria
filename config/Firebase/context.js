@@ -1,6 +1,8 @@
 import React, { createContext } from "react";
 
-const FirebaseContext = createContext({});
+export const FirebaseContext = createContext({
+  ob: 'lala'
+});
 
 export const FirebaseProvider = FirebaseContext.Provider;
 

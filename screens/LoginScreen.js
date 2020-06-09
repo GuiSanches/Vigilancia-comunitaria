@@ -35,7 +35,7 @@ const LoginScreen = (props) => {
 
             if (response.user) {
                 Alert.alert(`Bem vindo ${response.user.email}`)
-                navigation.navigate("Home");
+                navigation.navigate("Home");                
             } else {
             }
         } catch (error) {
@@ -95,7 +95,7 @@ const LoginScreen = (props) => {
                     Criar uma nova conta
                 </CustomText>
                 <Button
-                    title="Sign In with Google "
+                    title="Logar com Google "
                     onPress={async () => handleLoginGoogle()}
                 />
             </ImageBackground>
