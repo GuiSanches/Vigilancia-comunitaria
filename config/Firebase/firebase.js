@@ -8,14 +8,13 @@ import GoogleAuth from './firebaseConfig'
 // import * as GoogleSignIn from 'expo-google-sign-in'
 import { Alert } from 'react-native'
 
-
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const Firebase = {
   // auth
   loginWithEmail: (email, password) => {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   },
+  FIREBASE: firebase,
   loginWithGoogle: async (idToken, accessToken) => {
     // Working progress
     try {
@@ -49,8 +48,8 @@ const Firebase = {
   createNewUser: userData => {
     return firebase
       .firestore()
-      .collection("users")
-      .doc(`${userData.uid}`)
+      .collection("user")
+      .doc()
       .set(userData);
   }
 };

@@ -35,7 +35,7 @@ const LoginScreen = (props) => {
 
             if (response.user) {
                 Alert.alert(`Bem vindo ${response.user.email}`)
-                navigation.navigate("Home");                
+                navigation.navigate("Home");
             } else {
             }
         } catch (error) {
@@ -47,7 +47,31 @@ const LoginScreen = (props) => {
         }
     }
 
-    const handleLoginGoogle = async _ => {
+    const handleLoginGoogle =  _ => {
+        // try {
+        //     const pack_cadastro = {
+        //         cep: "13570540",
+        //         city: "São Carlos",
+        //         customer_rating: 99,
+        //         email: "matheudb@gmail.com",
+        //         name: "Matheus",
+        //         number: "1116",
+        //         phone: "16981893153",
+        //         street: "Rua Alfeo Ambrogio",
+        //         surname: "Hohlenwerger",
+        //         uf: "SP"
+        //     }
+
+        //     firebase.FIREBASE
+        //         .firestore()
+        //         .collection("USER")
+        //         .doc()
+        //         .set(pack_cadastro);
+
+        // } catch (e) {
+        //     console.log(e)
+        // }
+
         const response = firebase.loginWithGoogle()
     }
 
