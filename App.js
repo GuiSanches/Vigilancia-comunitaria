@@ -12,6 +12,16 @@ import useLinking from './navigation/useLinking';
 import LinksScreen from './screens/LinksScreen';
 import HomeScreen from './screens/HomeScreen';
 import Firebase, { FirebaseProvider } from "./config/Firebase";
+import { YellowBox } from 'react-native';
+import _ from 'lodash';
+
+YellowBox.ignoreWarnings(['Setting a timer']);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+};
 
 const Stack = createStackNavigator();
 
