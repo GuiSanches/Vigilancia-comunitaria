@@ -44,7 +44,7 @@ export const CustomDrawerContent = (props) => {
             <DrawerItem
                 label="PERFIL"
                 icon={({ focused }) => <TabBarIconMenu focused={focused} size={28} margin={3} name="md-person" />}
-                onPress={() => props.navigation.navigate('Home')}
+                onPress={() => props.navigation.navigate('Profile')}
             />
             <DrawerItem
                 label="CONFIGURAÇÕES"
