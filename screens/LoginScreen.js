@@ -114,7 +114,7 @@ const LoginScreen = (props) => {
                     style={styles.opcoesFinais}>
                     Esqueceu a senha?
                 </CustomText>
-                <CustomText onPress={() => props.navigation.navigate('Links')}
+                <CustomText onPress={() => props.navigation.navigate('Register')}
                     style={styles.opcoesFinais}>
                     Criar uma nova conta
                 </CustomText>
