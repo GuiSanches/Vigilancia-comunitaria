@@ -9,20 +9,32 @@ import { Avatar, Divider } from 'react-native-elements';
 import Animated from 'react-native-reanimated';
 import { TabBarIconMenu, TabBarIconMenuEvent, AlertIconMenu } from './TabBarIcon';
 import { MaterialIcons } from '@expo/vector-icons';
+import { withFirebaseHOC } from '../config/Firebase';
 
-export const CustomDrawerContent = (props) => {    
+const CustomDrawerContent = (props) => {
+    const { firebase } = props
+    const [loading, setLoading] = React.useState()
+
     const translateX = Animated.interpolate(props.progress, {
         inputRange: [0, 1],
         outputRange: [-100, 0],
     });
+    const [userNick, setUserNick] = React.useState('Marcelo')
+    const [userEmail, setUserEmail] = React.useState('gardier@security.com')    
+
+    React.useEffect(() => {
+        setUserNick(firebase.user.nickname)
+        setUserEmail(firebase.user.email)
+    }, [loading])
+
     return (
         <Animated.View style={[{ transform: [{ translateX }] }, styles.container]}
             {...props}>
             <View style={[styles.containHeader, { backgroundColor: '#e91e63' }]}>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Avatar size='large' rounded icon={{ name: 'user-circle-o', type: 'font-awesome', size: 80 }} />
-                    <Text style={{ color: '#f9f9f9', marginTop: '3%' }}>{`Hi Marcelo`}</Text>
-                    <Text style={{ color: '#f9f9f9' }}>{`gardier@security.com`}</Text>
+                    <Text style={{ color: '#f9f9f9', marginTop: '3%' }}>{`${userNick}`}</Text>
+                    <Text style={{ color: '#f9f9f9' }}>{userEmail}</Text>
                 </View>
             </View>
 
@@ -67,6 +79,8 @@ export const CustomDrawerContent = (props) => {
         </Animated.View>
     );
 }
+
+export default withFirebaseHOC(CustomDrawerContent)
 
 const styles = StyleSheet.create({
     container: {

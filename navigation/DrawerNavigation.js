@@ -4,7 +4,7 @@ import { TabBarIconMenu } from '../components/TabBarIcon';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import BottomTabNavigator from './BottomTabNavigator';
-import { CustomDrawerContent } from '../components/CustomDrawerContentComponent'
+import CustomDrawerContent from '../components/CustomDrawerContentComponent'
 import ProfileScreen from '../screens/ProfileScreen';
 const Drawer = createDrawerNavigator()
 

@@ -21,25 +21,40 @@ const PreviousPage = ({ navigation, title }) => (
     </View>
 )
 
-const ProfileScreen = ({ navigation, firebase }) => (
-    <View style={{ flex: 1, paddingTop: 0, zIndex: 5 }}>
-        <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />
-        <Topbar navigation={navigation} />
-        <View style={styles.container}>
-            <PreviousPage title="Perfil" navigation={navigation} />
+const ProfileScreen = ({ navigation, firebase }) => {
+    const [parseUserData, setParseUserData] = React.useState([
+        firebase.user.email,
+        firebase.user.phone,
+        firebase.user.cep,
+        firebase.user.city + '-' + firebase.user.uf,
+        firebase.user.neightborhood,
+        firebase.user.street + ' nº' + firebase.user.number
+    ])
 
-            <View style={styles.ProfileContainer}>
-                <ProfileUserImage firebase={firebase} />
-                <ProfileFormData />
+    React.useEffect(() => {
+        console.log('teste')
+    })
 
-                <TouchableOpacity style={styles.OutBtn}>
-                    <SimpleLineIcons name="logout" size={24} color="white" />
-                    <Text style={styles.OutBtnTxt}>SAIR</Text>
-                </TouchableOpacity>
+    return (
+        <View style={{ flex: 1, paddingTop: 0, zIndex: 5 }}>
+            <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />
+            <Topbar navigation={navigation} />
+            <View style={styles.container}>
+                <PreviousPage title="Perfil" navigation={navigation} />
+
+                <View style={styles.ProfileContainer}>
+                    <ProfileUserImage firebase={firebase} />
+                    <ProfileFormData listLabel={parseUserData} />
+
+                    <TouchableOpacity style={styles.OutBtn}>
+                        <SimpleLineIcons name="logout" size={24} color="white" />
+                        <Text style={styles.OutBtnTxt}>SAIR</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
-    </View>
-)
+    )
+}
 
 export default withFirebaseHOC(ProfileScreen)
 

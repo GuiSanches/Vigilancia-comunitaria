@@ -4,7 +4,7 @@ import * as Google from 'expo-google-app-auth';
 import "firebase/auth";
 import "firebase/firestore";
 import firebaseConfig from "./firebaseConfig";
-import GoogleAuth from './firebaseConfig'
+import { GoogleAuth } from './firebaseConfig'
 // import * as GoogleSignIn from 'expo-google-sign-in'
 import { Alert } from 'react-native'
 
@@ -15,10 +15,16 @@ const Firebase = {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   },
   FIREBASE: firebase,
+  user: {},
+  setUser: data => {
+    Firebase.user = data
+  },
   loginWithGoogle: async (idToken, accessToken) => {
     // Working progress
     try {
+      console.log(GoogleAuth)
       const { type, accessToken, user, idToken } = await Google.logInAsync(GoogleAuth);
+
       // Sla oq é isso
       if (type === 'success') {
         let userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
