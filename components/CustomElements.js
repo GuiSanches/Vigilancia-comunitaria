@@ -38,7 +38,13 @@ export const CustomTextInputWithImg = props => {
         <Icon styles={{ textAlign: 'center' }} />
       </View>
 
-      <TextInput multiline={true} onChangeText={updateValue} value={value} style={styles.CustomTextInputWithImgImput} placeholder={props.placeholder} />
+      <TextInput
+        secureTextEntry={props.type === 'password'}
+        multiline={!props.type === 'password'}
+        onChangeText={updateValue}
+        value={props.value || value}
+        style={styles.CustomTextInputWithImgImput}
+        placeholder={props.placeholder} />
     </View>
   )
 }
@@ -49,6 +55,7 @@ export const CustomAreaInputWithImg = props => {
   const [isMultiline_, setMultiline_] = React.useState(false)
   const [height_, setHeight_] = React.useState(200)
   const [borderRadius_, setBorderRadius_] = React.useState(defaultRadius)
+  const [value, setValue] = React.useState('')
 
   const handleFocus = _ => {
     setMultiline_(true)
@@ -58,6 +65,11 @@ export const CustomAreaInputWithImg = props => {
   const handleBlur = _ => {
     setMultiline_(false)
     setBorderRadius_(defaultRadius)
+  }
+
+  const updateValue = value => {
+    props.setContent(value)
+    setValue(value)
   }
 
   const newStyle = { borderRadius: borderRadius_, height: height_, textAlignVertical: 'top', paddingTop: 5, alignItems: 'flex-start' }
@@ -71,9 +83,12 @@ export const CustomAreaInputWithImg = props => {
 
 
       <TextInput
+        type={props.type || 'text'}
         onFocus={handleFocus}
         onBlur={handleBlur}
         multiline={isMultiline_}
+        onChangeText={updateValue}
+        value={value}
         style={[styles.CustomTextInputWithImgImput, newStyle]}
         placeholder={props.placeholder}
       />

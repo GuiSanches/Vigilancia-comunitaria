@@ -34,13 +34,13 @@ import {
 
 import * as Location from 'expo-location';
 
-const AlertLayoutScreen = props => {
+export const AlertLayoutScreen = props => {
     const { children } = props
     const { props: { navigation, route: { name } } } = children
     return (
         <View style={{ flex: 1, paddingTop: 0 }}>
             <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />
-            <Topbar {...{navigation}}/>
+            <Topbar {...{ navigation }} />
             <View style={styles.container}>
                 <LinearGradient
                     colors={['transparent', 'rgba(0,0,0,0.8)']}
@@ -62,20 +62,13 @@ const Page1 = props => {
     const { firebase, children } = props;
     const { navigation, route: { name } } = props
     const [location, setLocation] = React.useState(null);
+    const [loading, setLoading] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
+    const [subject, setSubject] = React.useState('');
+    const [report, setReport] = React.useState('');
 
     const idx = parseInt(props.route.name.slice(-1)) + 1
-    React.useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
-            }
-
-            let location = await Location.getCurrentPositionAsync({});
-            setLocation(location);
-        })();
-    });
+    
     return (
         <View style={styles.AlertContainer}>
             <AlertRoundImg />
@@ -85,10 +78,12 @@ const Page1 = props => {
 
                 <View style={styles.AlertForm}>
                     <AlertInput
+                        setContent={setSubject}
                         label={"Sobre o que é o alerta?"}
                         placeholder={"Assunto"}
                         Icon={({ styles }) => <SimpleLineIcons name="note" size={18} color="#40386F" style={styles} />} />
                     <AlertAreaInput
+                        setContent={setReport}
                         label={"Diga o que aconteceu"}
                         placeholder={"Relato"}
                         Icon={({ styles }) => <MaterialCommunityIcons name="comment-text-outline" size={20} color="black" style={styles} />}
@@ -96,13 +91,13 @@ const Page1 = props => {
 
                     <CustomButton
                         style={styles.AlertButton}
-                        onPress={_ => props.navigation.push(`Alert-${idx}`, { location })} title="Próximo" />
+                        onPress={_ => props.navigation.navigate(`Alert-${idx}`)} title="Próximo" />
 
                 </View>
             </View>
 
             <View style={styles.teste}>
-                <AlertStatusForm PagesLen={2} currPage={name} navigate={navigation.navigate} />
+                <AlertStatusForm PagesLen={2} currPage={name} navigate={props.navigation.navigate} />
                 <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
                     <Text style={styles.back}>Voltar</Text>
                 </TouchableOpacity>
@@ -125,8 +120,8 @@ const Page2 = props => {
                         Icon={({ styles }) => <Feather name="clock" size={18} color="black" style={styles} />}
                         label={"Em que horário, mais ou menos?"} />
                     <AlertAnonymousBTN
-                    label={"Publicar em modo anonimo"}
-                    setAnonymous={_ => {}} />
+                        label={"Publicar em modo anonimo"}
+                        setAnonymous={_ => { }} />
                     <CustomButton
                         style={styles.AlertButton}
                         onPress={_ => props.navigation.navigate(`Home`)} title="Criar Alerta" />

@@ -65,6 +65,29 @@ const LoginScreen = (props) => {
         //     uf: "SP",
         //     created_at: new Date(),
         //     updated_at: new Date()
+=======
+        // try {
+        //     const pack_cadastro = {
+        //         cep: "13570540",
+        //         city: "São Carlos",
+        //         customer_rating: 99,
+        //         email: "matheudb@gmail.com",
+        //         name: "Matheus",
+        //         number: "1116",
+        //         phone: "16981893153",
+        //         street: "Rua Alfeo Ambrogio",
+        //         surname: "Hohlenwerger",
+        //         uf: "SP"
+        //     }
+
+        //     firebase.FIREBASE
+        //         .firestore()
+        //         .collection("USER")
+        //         .doc()
+        //         .set(pack_cadastro);
+
+        // } catch (e) {
+        //     console.log(e)
         // }
 
         // var firebaseAddReturn = firebase.FIREBASE
@@ -127,11 +150,11 @@ const LoginScreen = (props) => {
                 />
                 <CustomButton isDisabled={botaoLogarDesativado}
                     onPress={() => handleOnLogin()} title="Entrar" />
-                <CustomText onPress={() => props.navigation.navigate('Links')}
+                <CustomText onPress={() => props.navigation.navigate('Registro', { refresh: true })}
                     style={styles.opcoesFinais}>
                     Esqueceu a senha?
                 </CustomText>
-                <CustomText onPress={() => props.navigation.navigate('Links')}
+                <CustomText onPress={() => props.navigation.navigate('Registro', { refresh: true })}
                     style={styles.opcoesFinais}>
                     Criar uma nova conta
                 </CustomText>
@@ -141,7 +164,7 @@ const LoginScreen = (props) => {
                 />
             </ImageBackground>
 
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
     );
 }
 

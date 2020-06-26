@@ -11,6 +11,7 @@ import DrawerNavigator from './navigation/DrawerNavigation'
 import useLinking from './navigation/useLinking';
 import LinksScreen from './screens/LinksScreen';
 import HomeScreen from './screens/HomeScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import Firebase, { FirebaseProvider } from "./config/Firebase";
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
@@ -97,6 +98,7 @@ export default function App(props) {
                 <>
                   {/* <Stack.Screen name="Root" component={BottomTabNavigator} /> */}
                   <Stack.Screen name="Drawer" component={DrawerNavigator} />
+                  <Stack.Screen name="Register" component={RegisterScreen} />
                 </>
               ) : (
                   <>
