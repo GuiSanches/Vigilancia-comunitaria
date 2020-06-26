@@ -50,11 +50,20 @@ export const AlertRoundImg = props => (
     <View style={styles.imgContainer}>
         <LinearGradient start={[0, 0.5]}
             end={[1, 0.5]}
-            colors={['#9724a7', '#7c24af']}
+            colors={['#ae29c0', '#6e1a9e']}
             style={{ borderRadius: 0 }, styles.imgBorder}>
             <Image source={megafone} style={styles.img} />
         </LinearGradient>
     </View>
+)
+
+export const ProfileRoundImg = props => (
+    <LinearGradient start={[0, 0.4]}
+        end={[1, 0.5]}
+        colors={['#c026d4', '#7c24af']}
+        style={{ borderRadius: 0 }, styles.ProfileBorder}>
+        <Image {...props} style={styles.img} />
+    </LinearGradient>
 )
 
 export const AlertStatusForm = ({ PagesLen, currPage, navigate }) => {
@@ -211,9 +220,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#A577B4'
     },
+    ProfileBorder: {
+        borderRadius: 100,
+        width: 107,
+        height: 105,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        backgroundColor: 'green',
+        elevation: 2
+    },
     img: {
         width: 100,
-        height: 100,
+        height: 101,
         borderRadius: 100,
         borderWidth: 10
     },
