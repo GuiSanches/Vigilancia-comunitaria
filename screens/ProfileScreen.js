@@ -28,7 +28,7 @@ const ProfileScreen = ({ navigation, firebase }) => {
         firebase.user.cep,
         firebase.user.city + '-' + firebase.user.uf,
         firebase.user.neightborhood,
-        firebase.user.street + ' nº' + firebase.user.number
+        firebase.user.street + ' nº ' + firebase.user.number
     ])
 
     React.useEffect(() => {

@@ -25,7 +25,7 @@ const CustomDrawerContent = (props) => {
     React.useEffect(() => {
         setUserNick(firebase.user.nickname)
         setUserEmail(firebase.user.email)
-    }, [loading])
+    }, [props])
 
     return (
         <Animated.View style={[{ transform: [{ translateX }] }, styles.container]}
