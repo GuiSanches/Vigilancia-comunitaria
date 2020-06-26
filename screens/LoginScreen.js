@@ -32,6 +32,8 @@ const LoginScreen = (props) => {
     const handleOnLogin = async _ => {
         try {
             const response = await firebase.loginWithEmail(email, password);
+            console.log(new Date())
+            console.log(response)
 
             if (response.user) {
                 Alert.alert(`Bem vindo ${response.user.email}`)
@@ -72,7 +74,29 @@ const LoginScreen = (props) => {
         //     console.log(e)
         // }
 
+        // var firebaseAddReturn = firebase.FIREBASE
+        //     .firestore()
+        //     .collection("USER")
+        //     .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
+        //     .set(addUser)
+
         const response = firebase.loginWithGoogle()
+
+        // let userDoc
+        // firebase
+        //     .FIREBASE
+        //     .firestore()
+        //     .collection("USER")
+        //     .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
+        //     .get().then(function (doc) {
+        //         // console.log(doc)
+        //         if (doc.exists) {
+        //             userDoc = doc.data()
+        //             console.log(userDoc)
+        //         } else {
+        //             // * error / not found *
+        //         }
+        //     })
     }
 
     React.useEffect(_ => {

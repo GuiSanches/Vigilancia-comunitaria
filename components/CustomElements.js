@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { Text, TouchableOpacity, TextInput, StyleSheet, View } from 'react-native'
+import { Text, TouchableOpacity, TextInput, StyleSheet, View, Image } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient';
 
 export const CustomText = props => {
   let fontFamily = 'ubuntu'
@@ -123,6 +124,15 @@ export const CustomButton = props => {
   )
 }
 
+export const ProfileRoundImg = props => (
+  <LinearGradient start={[0, 0.4]}
+    end={[1, 0.5]}
+    colors={['#c026d4', '#7c24af']}
+    style={{ borderRadius: 0 }, styles.ProfileBorder}>
+    <Image {...props} style={styles.img} />
+  </LinearGradient>
+)
+
 const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 20,
@@ -187,5 +197,20 @@ const styles = StyleSheet.create({
     width: 60,
     minHeight: 35,
     maxHeight: 220
+  },
+  ProfileBorder: {
+    borderRadius: 100,
+    width: 107,
+    height: 105,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'green',
+    elevation: 2
+  },
+  img: {
+    width: 100,
+    height: 101,
+    borderRadius: 100,
+    borderWidth: 10
   },
 })

@@ -4,8 +4,11 @@ import { TabBarIconMenu } from '../components/TabBarIcon';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import BottomTabNavigator from './BottomTabNavigator';
+
 import { CustomDrawerContent } from '../components/CustomDrawerContentComponent'
 import RegisterScreen from '../screens/RegisterScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+
 const Drawer = createDrawerNavigator()
 
 const DrawerNavigator = (props) => {
@@ -47,6 +50,10 @@ const DrawerNavigator = (props) => {
              <Drawer.Screen
                 name="Registro"
                 component={RegisterScreen}
+            <Drawer.Screen
+                name="Profile"
+                component={ProfileScreen}
+
                 options={{
                     drawerIcon: ({ focused }) => <TabBarIconMenu focused={focused} name="md-book" />,
                 }}
