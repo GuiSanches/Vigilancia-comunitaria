@@ -35,6 +35,7 @@ export default function App(props) {
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
+      console.log('rodou')
       try {
         SplashScreen.preventAutoHide();
         // Load our initial navigation state
@@ -48,6 +49,20 @@ export default function App(props) {
           ...Ionicons.font,
           'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
         });
+        Firebase
+          .FIREBASE
+          .firestore()
+          .collection("USER")
+          .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
+          .get().then(function (doc) {
+            // console.log(doc)
+            if (doc.exists) {
+              userDoc = doc.data()
+              Firebase.setUser(userDoc)
+            } else {
+              // * error / not found *
+            }
+          })
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);

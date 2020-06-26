@@ -32,6 +32,8 @@ const LoginScreen = (props) => {
     const handleOnLogin = async _ => {
         try {
             const response = await firebase.loginWithEmail(email, password);
+            console.log(new Date())
+            console.log(response)
 
             if (response.user) {
                 Alert.alert(`Bem vindo ${response.user.email}`)
@@ -47,32 +49,47 @@ const LoginScreen = (props) => {
         }
     }
 
-    const handleLoginGoogle =  _ => {
-        // try {
-        //     const pack_cadastro = {
-        //         cep: "13570540",
-        //         city: "São Carlos",
-        //         customer_rating: 99,
-        //         email: "matheudb@gmail.com",
-        //         name: "Matheus",
-        //         number: "1116",
-        //         phone: "16981893153",
-        //         street: "Rua Alfeo Ambrogio",
-        //         surname: "Hohlenwerger",
-        //         uf: "SP"
-        //     }
-
-        //     firebase.FIREBASE
-        //         .firestore()
-        //         .collection("USER")
-        //         .doc()
-        //         .set(pack_cadastro);
-
-        // } catch (e) {
-        //     console.log(e)
+    const handleLoginGoogle = _ => {
+        // const addUser = {
+        //     email: "matheudb@gmail.com",
+        //     nickname: "Simo",
+        //     name: "Matheus",
+        //     surname: "Hohlenwerger",
+        //     customer_rating: 99,
+        //     phone: "16981893153",
+        //     cep: "13570540",
+        //     city: "São Carlos",
+        //     neightborhood: "Jd. Mercedes",
+        //     street: "Rua Alfeo Ambrogio",
+        //     number: "1138",
+        //     uf: "SP",
+        //     created_at: new Date(),
+        //     updated_at: new Date()
         // }
 
+        // var firebaseAddReturn = firebase.FIREBASE
+        //     .firestore()
+        //     .collection("USER")
+        //     .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
+        //     .set(addUser)
+
         const response = firebase.loginWithGoogle()
+
+        // let userDoc
+        // firebase
+        //     .FIREBASE
+        //     .firestore()
+        //     .collection("USER")
+        //     .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
+        //     .get().then(function (doc) {
+        //         // console.log(doc)
+        //         if (doc.exists) {
+        //             userDoc = doc.data()
+        //             console.log(userDoc)
+        //         } else {
+        //             // * error / not found *
+        //         }
+        //     })
     }
 
     React.useEffect(_ => {
