@@ -5,6 +5,7 @@ import { TabBarIconMenu } from '../components/TabBarIcon';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import BottomTabNavigator from './BottomTabNavigator';
 import { CustomDrawerContent } from '../components/CustomDrawerContentComponent'
+import RegisterScreen from '../screens/RegisterScreen';
 const Drawer = createDrawerNavigator()
 
 const DrawerNavigator = (props) => {
@@ -38,6 +39,14 @@ const DrawerNavigator = (props) => {
             <Drawer.Screen
                 name="botton"
                 component={BottomTabNavigator}
+                options={{
+                    drawerIcon: ({ focused }) => <TabBarIconMenu focused={focused} name="md-book" />,
+                }}
+
+            />
+             <Drawer.Screen
+                name="Registro"
+                component={RegisterScreen}
                 options={{
                     drawerIcon: ({ focused }) => <TabBarIconMenu focused={focused} name="md-book" />,
                 }}

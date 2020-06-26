@@ -20,11 +20,13 @@ import { TextInput } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-export const AlertInput = ({ label, placeholder, Icon, setContent }) => {
+export const AlertInput = ({ label, placeholder, Icon, setContent, type, value }) => {
     return (
         <View>
-            <Text style={styles.AlertInputLabel}>{label}</Text>
+            {label && <Text style={styles.AlertInputLabel}>{label}</Text>}
             <CustomTextInputWithImg
+                type={type}
+                value={value}
                 Icon={Icon}
                 placeholder={placeholder}
                 setContent={setContent} />
@@ -32,11 +34,12 @@ export const AlertInput = ({ label, placeholder, Icon, setContent }) => {
     )
 }
 
-export const AlertAreaInput = ({ label, placeholder, Icon }) => {
+export const AlertAreaInput = ({ label, placeholder, Icon, setContent }) => {
     return (
         <View>
             <Text style={styles.AlertInputLabel}>{label}</Text>
             <CustomAreaInputWithImg
+                setContent={setContent}
                 Icon={Icon}
                 placeholder={placeholder} />
         </View>
@@ -116,7 +119,7 @@ export const AlertDate = ({ label }) => {
     const [curr, setCurr] = React.useState(months[getDayIdx()])
 
     return (
-        <View style={{marginTop: 5}}>
+        <View style={{ marginTop: 5 }}>
             <Text style={styles.AlertInputLabel}>{label}</Text>
             <View style={styles.AlertDate}>
                 <CustomMiniInput label={"Dia"} />
@@ -170,12 +173,12 @@ export const AlertAnonymousBTN = ({ setAnonymous, label }) => {
     return (
         <View>
             <View style={styles.item} >
-                <CheckBox 
-                checked={checked} 
-                color="#fc5185" 
-                checkedIcon='dot-circle-o'
-                uncheckedIcon='circle-o'
-                onPress={() => setChecked(!checked)} />
+                <CheckBox
+                    checked={checked}
+                    color="#fc5185"
+                    checkedIcon='dot-circle-o'
+                    uncheckedIcon='circle-o'
+                    onPress={() => setChecked(!checked)} />
                 <Text style={
                     {
                         ...styles.checkBoxTxt,
@@ -312,15 +315,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center'
     },
-    item:{
-        width:"80%",
+    item: {
+        width: "80%",
         alignItems: 'center',
-        borderRadius:20,
+        borderRadius: 20,
         padding: 0,
-        marginBottom:10,
-        flexDirection:"row",
-      },
-      checkBoxTxt:{
+        marginBottom: 10,
+        flexDirection: "row",
+    },
+    checkBoxTxt: {
         marginLeft: -25
-      },
+    },
 })

@@ -47,7 +47,7 @@ const LoginScreen = (props) => {
         }
     }
 
-    const handleLoginGoogle =  _ => {
+    const handleLoginGoogle = _ => {
         // try {
         //     const pack_cadastro = {
         //         cep: "13570540",
@@ -110,11 +110,11 @@ const LoginScreen = (props) => {
                 />
                 <CustomButton isDisabled={botaoLogarDesativado}
                     onPress={() => handleOnLogin()} title="Entrar" />
-                <CustomText onPress={() => props.navigation.navigate('Links')}
+                <CustomText onPress={() => props.navigation.navigate('Registro', { refresh: true })}
                     style={styles.opcoesFinais}>
                     Esqueceu a senha?
                 </CustomText>
-                <CustomText onPress={() => props.navigation.navigate('Register')}
+                <CustomText onPress={() => props.navigation.navigate('Registro', { refresh: true })}
                     style={styles.opcoesFinais}>
                     Criar uma nova conta
                 </CustomText>
@@ -124,7 +124,7 @@ const LoginScreen = (props) => {
                 />
             </ImageBackground>
 
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
     );
 }
 
