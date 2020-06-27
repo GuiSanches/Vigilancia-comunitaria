@@ -63,7 +63,7 @@ const RegisterScreen = (props) => {
                 .collection("USER")
                 .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
                 .set(addUser)
-            navigation.navigate('home')
+            firebase.setLogged(true)
 
         } catch (error) {
             Alert.alert('error', error.message)

@@ -20,11 +20,14 @@ const CustomDrawerContent = (props) => {
         outputRange: [-100, 0],
     });
     const [userNick, setUserNick] = React.useState('Marcelo')
-    const [userEmail, setUserEmail] = React.useState('gardier@security.com')    
+    const [userEmail, setUserEmail] = React.useState()
 
     React.useEffect(() => {
-        setUserNick(firebase.user.nickname)
-        setUserEmail(firebase.user.email)
+        const { user } = firebase
+        if (user.email && !userEmail) {
+            setUserNick(firebase.user.nickname)
+            setUserEmail(firebase.user.email)
+        }
     }, [props])
 
     return (

@@ -3,19 +3,17 @@ import * as React from 'react';
 
 import TabBarIcon, {TabBarIconMenuEvent} from '../components/TabBarIcon';
 import { AlertIcon } from '../components/TabBarIcon'
-import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import LoginScreen from '../screens/LoginScreen';
 import FeedScreen from '../screens/FeedScreen';
 import { View, Text, TouchableOpacity, Easing } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import AlertScreen from '../screens/AlertScreen';
 import { TransitionPresets, CardStyleInterpolators } from '@react-navigation/stack';
 import AlertNavigation from './AlertNavigation';
 import TabBar from '../components/BottomTabBar'
+import ProfileScreen from '../screens/ProfileScreen';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Login';
+const INITIAL_ROUTE_NAME = 'Home';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -91,8 +89,8 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Login"
-        component={LoginScreen}
+        name="Profile"
+        component={ProfileScreen}
         options={{
           title: 'Login',
           gestureEnabled: true,

@@ -31,10 +31,6 @@ const ProfileScreen = ({ navigation, firebase }) => {
         firebase.user.street + ' nº ' + firebase.user.number
     ])
 
-    React.useEffect(() => {
-        console.log('teste')
-    })
-
     return (
         <View style={{ flex: 1, paddingTop: 0, zIndex: 5 }}>
             <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />

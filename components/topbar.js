@@ -6,15 +6,25 @@ import {
     ToolbarAndroid,
     TouchableOpacity,
     Image,
+    Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../assets/images/logo-icon.png'
 
 const Topbar = props => {
 
+    const handleToggle = e => {
+        try {
+            props.navigation.toggleDrawer()
+        }catch(e) {
+            Alert.alert('Você precisa estar logado para acessar todas as funções')
+        }
+        
+    }
+
     return (
         <View style={[styles.container]}>
-            <TouchableOpacity onPress={e => props.navigation.toggleDrawer()}>
+            <TouchableOpacity onPress={handleToggle}>
                 <Ionicons name="md-menu" size={24} color="white" />
             </TouchableOpacity>
 

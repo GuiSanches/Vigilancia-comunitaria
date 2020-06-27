@@ -15,10 +15,6 @@ const Firebase = {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   },
   FIREBASE: firebase,
-  user: {},
-  setUser: data => {
-    Firebase.user = data
-  },
   loginWithGoogle: async (idToken, accessToken) => {
     // Working progress
     try {

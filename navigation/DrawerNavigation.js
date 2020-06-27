@@ -1,23 +1,40 @@
 import * as React from 'react';
-import { View, Button } from 'react-native';
 import { TabBarIconMenu } from '../components/TabBarIcon';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import BottomTabNavigator from './BottomTabNavigator';
 import CustomDrawerContent from '../components/CustomDrawerContentComponent'
-import ProfileScreen from '../screens/ProfileScreen';
-//import { CustomDrawerContent } from '../components/CustomDrawerContentComponent'
-import RegisterScreen from '../screens/RegisterScreen';
-
+import { withFirebaseHOC } from '../config/Firebase';
+// import { CustomDrawerContent } from '../components/CustomDrawerContentComponent'
 const Drawer = createDrawerNavigator()
-
-const DrawerNavigator = (props) => {
+const DrawerNavigator = ({firebase, ...props}) => {
     const INITIAL_ROUTE_NAME = 'botton'
     props.navigation.setOptions({
         headerShown: false,
         gestureEnabled: true,
         gestureDirection: 'horizontal'
     })
+
+    React.useEffect(_ => {
+        try {
+            firebase
+                .FIREBASE
+                .firestore()
+                .collection("USER")
+                .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
+                .get().then(function (doc) {
+                    if (doc.exists) {
+                        let userDoc = doc.data()
+                        firebase.setUser(userDoc)
+                    } else {
+                        // * error / not found *
+                    }
+                })
+        } catch (e) {
+            console.log(e)
+        }
+
+    }, [])
     return (
         <Drawer.Navigator
             initialRouteName={INITIAL_ROUTE_NAME}
@@ -47,24 +64,8 @@ const DrawerNavigator = (props) => {
                 }}
 
             />
-            <Drawer.Screen
-                name="Profile"
-                component={ProfileScreen}
-                options={{
-                    drawerIcon: ({ focused }) => <TabBarIconMenu focused={focused} name="md-book" />,
-                }}
-
-            />
-             <Drawer.Screen
-                name="Registro"
-                component={RegisterScreen}
-                options={{
-                    drawerIcon: ({ focused }) => <TabBarIconMenu focused={focused} name="md-book" />,
-                }}
-
-            />
         </Drawer.Navigator>
     )
 }
 
-export default DrawerNavigator
+export default withFirebaseHOC(DrawerNavigator)

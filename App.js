@@ -12,10 +12,12 @@ import useLinking from './navigation/useLinking';
 import LinksScreen from './screens/LinksScreen';
 import HomeScreen from './screens/HomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import Firebase, { FirebaseProvider } from "./config/Firebase";
+import Firebase, { FirebaseCtx, FirebaseContext } from "./config/Firebase";
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
+import LoginScreen from './screens/LoginScreen';
 
+// Todo resolver esses warnings
 YellowBox.ignoreWarnings(['Setting a timer']);
 const _console = _.clone(console);
 console.warn = message => {
@@ -32,11 +34,11 @@ export default function App(props) {
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
+  const ob = React.useContext(FirebaseContext)
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
-      console.log('rodou')
       try {
         SplashScreen.preventAutoHide();
         // Load our initial navigation state
@@ -49,21 +51,7 @@ export default function App(props) {
           'ubuntu-bold-italic': require('./assets/fonts/ubuntu/Ubuntu-BoldItalic.ttf'),
           ...Ionicons.font,
           'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-        });
-        Firebase
-          .FIREBASE
-          .firestore()
-          .collection("USER")
-          .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
-          .get().then(function (doc) {
-            // console.log(doc)
-            if (doc.exists) {
-              userDoc = doc.data()
-              Firebase.setUser(userDoc)
-            } else {
-              // * error / not found *
-            }
-          })
+        });        
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);
@@ -72,7 +60,6 @@ export default function App(props) {
         SplashScreen.hide();
       }
     }
-    setLoggedIn(true);
     loadResourcesAndDataAsync();
   }, []);
 
@@ -80,36 +67,33 @@ export default function App(props) {
     return null;
   } else {
     return (
-      <FirebaseProvider value={Firebase}>
+      <FirebaseCtx setLoggedIn={setLoggedIn}>
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <NavigationContainer ref={containerRef} initialState={initialNavigationState}
-            navigationOptions={{
-              header: null,
-              headerVisible: false,
-              tapBarVisible: false
-            }}
-            screenOptions={{
-              headerShown: false,
-              headerVisible: false,
-            }}>
-            <Stack.Navigator>
+          <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
+            <Stack.Navigator
+              screenOptions={{
+                header: null,
+                headerVisible: false,
+                headerShown: false,
+                tapBarVisible: false
+              }}
+            >
               {isLoggedIn ? (
-                <>
-                  {/* <Stack.Screen name="Root" component={BottomTabNavigator} /> */}
+                <>                  
                   <Stack.Screen name="Drawer" component={DrawerNavigator} />
-                  <Stack.Screen name="Register" component={RegisterScreen} />
                 </>
               ) : (
                   <>
-                    <Stack.Screen name="Home" component={HomeScreen} />
-                    <Stack.Screen name="Settings" component={LinksScreen} />
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="Registro" component={RegisterScreen} />
+
                   </>
                 )}
             </Stack.Navigator>
           </NavigationContainer>
         </View>
-      </FirebaseProvider>
+      </FirebaseCtx>
     );
   }
 }

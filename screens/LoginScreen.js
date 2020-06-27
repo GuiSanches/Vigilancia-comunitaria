@@ -2,8 +2,6 @@ import * as React from 'react';
 import {
     StyleSheet,
     KeyboardAvoidingView,
-    Keyboard,
-    ToastAndroid,
     ImageBackground,
     AsyncStorage,
     Button,
@@ -31,13 +29,10 @@ const LoginScreen = (props) => {
 
     const handleOnLogin = async _ => {
         try {
-            const response = await firebase.loginWithEmail(email, password);
-            console.log(new Date())
-            console.log(response)
-
+            const response = await firebase.loginWithEmail(email, password);   
             if (response.user) {
                 Alert.alert(`Bem vindo ${response.user.email}`)
-                navigation.navigate("Home");
+                firebase.setLogged(true)
             } else {
             }
         } catch (error) {
@@ -65,7 +60,7 @@ const LoginScreen = (props) => {
         //     uf: "SP",
         //     created_at: new Date(),
         //     updated_at: new Date()
-//=======
+        //=======
         // try {
         //     const pack_cadastro = {
         //         cep: "13570540",

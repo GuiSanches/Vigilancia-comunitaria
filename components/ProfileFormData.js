@@ -50,7 +50,6 @@ export default ProfileFormData = ({ listLabel }) => {
     const [load, setLoad] = React.useState(false)
 
     React.useEffect(_ => {
-        // console.log('teste', list)
         const list_ = list.map((v, idx) => ({
             title: v.title,
             icon: v.icon,
@@ -58,7 +57,6 @@ export default ProfileFormData = ({ listLabel }) => {
         })
         )
         setList(list_)
-        console.log('console', list_)
     }, [load])
 
     return (
