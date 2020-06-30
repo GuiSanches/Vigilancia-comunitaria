@@ -3,17 +3,11 @@ import Firebase from './firebase'
 
 const FirebaseContext = createContext();
 
-export const FirebaseProvider = FirebaseContext.Provider;
+const FirebaseConsumer = FirebaseContext.Consumer;
 
-export const FirebaseConsumer = FirebaseContext.Consumer;
+const FirebaseProvider = FirebaseContext.Provider;
 
-export const withFirebaseHOC = Component => props => (
-  <FirebaseConsumer>
-    {state => <Component {...props} firebase={state} />}
-  </FirebaseConsumer>
-);
-
-export function FirebaseCtx({ setLoggedIn, ...props }) {
+const FirebaseProviderComponent = ({ setLoggedIn, children }) => {
   const [data, setData] = React.useState()
   const [user, setUser] = React.useState({})
   const [logged, setLogged_] = React.useState(false)
@@ -32,9 +26,15 @@ export function FirebaseCtx({ setLoggedIn, ...props }) {
       logged,
       setLogged
     }}>
-      {props.children}
+      {children}
     </FirebaseProvider>
   )
 }
 
-export { FirebaseContext }
+export const withFirebaseHOC = Component => props => (
+  <FirebaseConsumer>
+    {state => <Component {...props} firebase={state} />}
+  </FirebaseConsumer>
+);
+
+export { FirebaseProviderComponent as FirebaseProvider }

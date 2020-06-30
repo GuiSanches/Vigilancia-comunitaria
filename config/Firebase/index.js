@@ -1,6 +1,6 @@
 import Firebase from "./firebase";
-import { withFirebaseHOC, FirebaseCtx, FirebaseContext } from "./context";
+import { withFirebaseHOC, FirebaseProvider } from "./context";
 
 export default Firebase;
 
-export { withFirebaseHOC, FirebaseCtx, FirebaseContext };
+export { withFirebaseHOC, FirebaseProvider };

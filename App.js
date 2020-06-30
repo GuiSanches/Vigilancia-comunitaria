@@ -12,7 +12,7 @@ import useLinking from './navigation/useLinking';
 import LinksScreen from './screens/LinksScreen';
 import HomeScreen from './screens/HomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import Firebase, { FirebaseCtx, FirebaseContext } from "./config/Firebase";
+import Firebase, { FirebaseProvider } from "./config/Firebase";
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
 import LoginScreen from './screens/LoginScreen';
@@ -34,7 +34,6 @@ export default function App(props) {
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
-  const ob = React.useContext(FirebaseContext)
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
@@ -67,7 +66,7 @@ export default function App(props) {
     return null;
   } else {
     return (
-      <FirebaseCtx setLoggedIn={setLoggedIn}>
+      <FirebaseProvider setLoggedIn={setLoggedIn}>
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
@@ -93,7 +92,7 @@ export default function App(props) {
             </Stack.Navigator>
           </NavigationContainer>
         </View>
-      </FirebaseCtx>
+      </FirebaseProvider>
     );
   }
 }
