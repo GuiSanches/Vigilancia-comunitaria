@@ -8,23 +8,32 @@ const FirebaseConsumer = FirebaseContext.Consumer;
 const FirebaseProvider = FirebaseContext.Provider;
 
 const FirebaseProviderComponent = ({ setLoggedIn, children }) => {
-  const [data, setData] = React.useState()
+  const [token, setToken_] = React.useState()
   const [user, setUser] = React.useState({})
-  const [logged, setLogged_] = React.useState(false)
 
-  const setLogged = bool => {
-    setLogged_(bool)
-    setLoggedIn(bool)
+  const setToken = token => {
+    setLoggedIn(true)
+    Firebase.getUserData(token)
+      .then(doc => {
+        if (doc.exists) {
+          let user = doc.data()
+          setUser(user)
+          setToken_(token)
+        } else {
+          // * error / not found *
+        }
+      })
   }
+  React.useEffect(_ => {
+    console.log(token, user)
+  }, [token, user])
   return (
     <FirebaseProvider value={{
       ...Firebase,
-      data,
-      setData,
+      token,
+      setToken,
       user,
       setUser,
-      logged,
-      setLogged
     }}>
       {children}
     </FirebaseProvider>

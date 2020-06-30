@@ -6,7 +6,7 @@ import "firebase/firestore";
 import firebaseConfig from "./firebaseConfig";
 import { GoogleAuth } from './firebaseConfig'
 // import * as GoogleSignIn from 'expo-google-sign-in'
-import { Alert } from 'react-native'
+import { Alert, AsyncStorage } from 'react-native'
 
 firebase.initializeApp(firebaseConfig);
 const Firebase = {
@@ -37,8 +37,25 @@ const Firebase = {
   signupWithEmail: (email, password) => {
     return firebase.auth().createUserWithEmailAndPassword(email, password);
   },
+  registerUserWithEmail: async (email, password, userData) => {
+    try {
+      const response = await firebase.auth().createUserWithEmailAndPassword(email, password)
+      // console.log(response, 'resp', userData)
+      firebase
+        .firestore()
+        .collection("USER")
+        .doc(response.user.uid)
+        .set(userData)
+    } catch (e) {
+      throw e
+    }
+
+  },
   signOut: () => {
     return firebase.auth().signOut();
+  },
+  getUserData: uid => {
+    return firebase.firestore().collection('user').doc(uid).get()
   },
   checkUserAuth: user => {
     return firebase.auth().onAuthStateChanged(user);
