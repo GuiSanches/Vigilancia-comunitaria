@@ -55,7 +55,7 @@ const Firebase = {
     return firebase.auth().signOut();
   },
   getUserData: uid => {
-    return firebase.firestore().collection('user').doc(uid).get()
+    return firebase.firestore().collection('USER').doc(uid).get()
   },
   checkUserAuth: user => {
     return firebase.auth().onAuthStateChanged(user);
@@ -67,7 +67,7 @@ const Firebase = {
   createNewUser: userData => {
     return firebase
       .firestore()
-      .collection("user")
+      .collection("USER")
       .doc()
       .set(userData);
   }

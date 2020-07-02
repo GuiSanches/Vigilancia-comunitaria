@@ -31,7 +31,7 @@ const DrawerNavigator = ({firebase, ...props}) => {
                     }
                 })
         } catch (e) {
-            console.log(e)
+            console.log('erro')
         }
 
     }, [])
