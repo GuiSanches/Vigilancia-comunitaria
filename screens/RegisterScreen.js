@@ -19,6 +19,7 @@ import { SimpleLineIcons, Ionicons, Fontisto, Feather, EvilIcons } from '@expo/v
 import { LinearGradient } from 'expo-linear-gradient';
 import megafone from '../assets/images/teste.jpeg'
 import { AlertLayoutScreen } from './AlertScreen';
+import axios from 'axios'
 
 const RegisterScreen = (props) => {
     const { navigation, firebase } = props;
@@ -39,32 +40,48 @@ const RegisterScreen = (props) => {
             setBotaoRegistrarDesativado(false)
     })
 
+    const meu_callback = conteudo => {
+        if (!("erro" in conteudo)) {
+            const { logradouro, bairro, localidade, uf, ibge } = conteudo
+        } //end if.
+        else {
+            //CEP não Encontrado.
+            limpa_formulário_cep();
+            alert("CEP não encontrado.");
+        }
+    }
+
     const handleOnRegister = async _ => {
         try {
-            const addUser = {
-                email: email,
-                nickname: nick,
-                name: name.split(' ')[0],
-                surname: name.split(' ').slice(1).join(' '),
-                customer_rating: 99,
-                phone: phone,
-                cep: cep,
-                city: "São Carlos",
-                neighborhood: "Jd. Mercedes",
-                street: "Rua Alfeo Ambrogio",
-                number: number,
-                uf: "SP",
-                created_at: new Date(),
-                updated_at: new Date()
+            const CEPvalidation = /^[0-9]{8}$/
+            let cleaned = ('' + cep).replace(/\D/g, '');
+            if (CEPvalidation.test(cleaned)) {
+                axios.get(`https://viacep.com.br/ws/${cleaned}/json`).then(res => {
+                    const { logradouro, bairro, localidade, uf } = res.data
+
+                    const addUser = {
+                        email: email,
+                        nickname: nick,
+                        name: name.split(' ')[0],
+                        surname: name.split(' ').slice(1).join(' '),
+                        customer_rating: 99,
+                        phone: phone,
+                        cep: cleaned,
+                        city: localidade,
+                        neighborhood: bairro,
+                        street: logradouro,
+                        number: parseInt(number),
+                        uf,
+                        created_at: new Date(),
+                        updated_at: new Date()
+                    }
+
+                    firebase.registerUserWithEmail(email, password, addUser)
+                    firebase.setToken(true)
+                })
+            } else {
+                console.log(cep)
             }
-
-            var firebaseAddReturn = firebase.FIREBASE
-                .firestore()
-                .collection("USER")
-                .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
-                .set(addUser)
-            firebase.setLogged(true)
-
         } catch (error) {
             Alert.alert('error', error.message)
         }

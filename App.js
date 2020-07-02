@@ -5,14 +5,10 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import BottomTabNavigator from './navigation/BottomTabNavigator';
 import DrawerNavigator from './navigation/DrawerNavigation'
 import useLinking from './navigation/useLinking';
-import LinksScreen from './screens/LinksScreen';
-import HomeScreen from './screens/HomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import Firebase, { FirebaseProvider } from "./config/Firebase";
+import { FirebaseProvider } from "./config/Firebase";
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
 import LoginScreen from './screens/LoginScreen';
