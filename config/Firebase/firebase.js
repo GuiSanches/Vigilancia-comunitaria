@@ -40,12 +40,12 @@ const Firebase = {
   registerUserWithEmail: async (email, password, userData) => {
     try {
       const response = await firebase.auth().createUserWithEmailAndPassword(email, password)
-      // console.log(response, 'resp', userData)
       firebase
         .firestore()
         .collection("USER")
         .doc(response.user.uid)
         .set(userData)
+        return response.user.uid
     } catch (e) {
       throw e
     }

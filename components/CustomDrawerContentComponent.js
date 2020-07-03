@@ -4,7 +4,7 @@ import {
     DrawerItemList,
     DrawerItem
 } from '@react-navigation/drawer';
-import { Linking, View, Text, StyleSheet } from 'react-native';
+import { Linking, View, Text, StyleSheet, AsyncStorage } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 import Animated from 'react-native-reanimated';
 import { TabBarIconMenu, TabBarIconMenuEvent, AlertIconMenu } from './TabBarIcon';
@@ -29,6 +29,11 @@ const CustomDrawerContent = (props) => {
             setUserEmail(firebase.user.email)
         }
     }, [props])
+
+    const handleLogout = _ => {
+        AsyncStorage.clear()
+        firebase.setToken(null)
+    }
 
     return (
         <Animated.View style={[{ transform: [{ translateX }] }, styles.container]}
@@ -75,7 +80,7 @@ const CustomDrawerContent = (props) => {
 
             <DrawerItem
                 label="Sair"
-                onPress={() => Linking.openURL('https://mywebsite.com/help')}
+                onPress={handleLogout}
                 icon={({ focused }) => <TabBarIconMenu focused={focused} name="ios-power" />}
                 style={styles.closeBtn}
             />
