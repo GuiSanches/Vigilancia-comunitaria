@@ -40,23 +40,12 @@ const RegisterScreen = (props) => {
             setBotaoRegistrarDesativado(false)
     })
 
-    const meu_callback = conteudo => {
-        if (!("erro" in conteudo)) {
-            const { logradouro, bairro, localidade, uf, ibge } = conteudo
-        } //end if.
-        else {
-            //CEP não Encontrado.
-            limpa_formulário_cep();
-            alert("CEP não encontrado.");
-        }
-    }
-
     const handleOnRegister = async _ => {
         try {
             const CEPvalidation = /^[0-9]{8}$/
             let cleaned = ('' + cep).replace(/\D/g, '');
             if (CEPvalidation.test(cleaned)) {
-                axios.get(`https://viacep.com.br/ws/${cleaned}/json`).then(res => {
+                axios.get(`https://viacep.com.br/ws/${cleaned}/json`).then(async res => {
                     const { logradouro, bairro, localidade, uf } = res.data
 
                     const addUser = {
@@ -76,8 +65,8 @@ const RegisterScreen = (props) => {
                         updated_at: new Date()
                     }
 
-                    firebase.registerUserWithEmail(email, password, addUser)
-                    firebase.setToken(true)
+                    const token = await firebase.registerUserWithEmail(email, password, addUser)
+                    firebase.RegisterUser(token, addUser)
                 })
             } else {
                 console.log(cep)
