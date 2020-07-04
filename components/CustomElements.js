@@ -25,12 +25,31 @@ export const CustomTextInput = props => {
 }
 
 export const CustomTextInputWithImg = props => {
-  const { Icon, setContent } = props
+  const { Icon, setContent, onBlur } = props
   const [value, setValue] = React.useState()
 
   const updateValue = v => {
     setValue(v)
-    setContent(v)
+    try {
+      setContent(v)
+    } catch (e) {
+      //
+    }
+
+  }
+
+  React.useEffect(_ => {
+    // console.log(props)
+  })
+
+  const handleBlur = v => {
+    try {
+      const value = v.nativeEvent.text
+      if (typeof value === 'string')
+        onBlur(value)
+    } catch (e) {
+      console.log(e)
+    }
   }
   return (
     <View style={styles.CustomTextInputWithImg}>
@@ -42,6 +61,8 @@ export const CustomTextInputWithImg = props => {
         secureTextEntry={props.type === 'password'}
         multiline={!props.type === 'password'}
         onChangeText={updateValue}
+        onEndEditing={handleBlur}
+        onBlur={handleBlur}
         value={props.value || value}
         style={styles.CustomTextInputWithImgImput}
         placeholder={props.placeholder} />
@@ -97,14 +118,20 @@ export const CustomAreaInputWithImg = props => {
 }
 
 export const CustomMiniInput = props => {
+  const [value, setValue] = React.useState()
   let fontFamily = 'ubuntu'
   if (props.bold) fontFamily += '-bold'
   if (props.italic) fontFamily += '-italic'
 
-  const { style, label, ...otherProps } = props
+  const { style, label, setContent, ...otherProps } = props
+
+  const handleChange = v => {
+    setContent(v)
+    setValue(v)
+  }
 
   return (
-    <TextInput placeholder={label} style={styles.CustomMiniInput} />
+    <TextInput placeholder={label} value={value} onChangeText={handleChange} style={styles.CustomMiniInput} />
   )
 }
 

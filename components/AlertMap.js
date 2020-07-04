@@ -3,13 +3,13 @@ import * as Location from 'expo-location';
 import MapView, { Animated, Circle } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 
-import {View} from 'react-native';
+import { View } from 'react-native';
 
 import { Entypo, EvilIcons } from '@expo/vector-icons';
 
-import {AlertInput} from '../components/AlertCustomElements'
+import { AlertInput } from '../components/AlertCustomElements'
 
-const AlertMap = ({ location }) => {
+const AlertMap = ({ location, setAddress }) => {
     const [location_, setLocation] = React.useState(null)
     const [mapRegion, setMapRegion] = React.useState(null)
     const [marker, setMarker] = React.useState(null)
@@ -49,22 +49,33 @@ const AlertMap = ({ location }) => {
     }
 
     const handleMarkerAsync = async address => {
-        let arrAddress = await Location.geocodeAsync(address)
-        if (arrAddress.length > 0) {
+        let arrAddressMap = await Location.geocodeAsync(address)
+        console.log(address)
+        if (arrAddressMap.length > 0) {
+            let arrAddress = await Location.reverseGeocodeAsync(arrAddressMap[0])
             setMapRegion({
-                latitude: arrAddress[0].latitude,
-                longitude: arrAddress[0].longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+                latitude: arrAddressMap[0].latitude,
+                longitude: arrAddressMap[0].longitude,
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005
             })
 
+            let latlng = {
+                latitude: arrAddressMap[0].latitude,
+                longitude: arrAddressMap[0].longitude,
+            }
+
             setMarker({
-                latlng: {
-                    latitude: arrAddress[0].latitude,
-                    longitude: arrAddress[0].longitude,
-                },
+                latlng,
                 title: 'Localização atentado',
                 description: 'Área do ocorrido'
+            })
+
+            console.log(arrAddress, 'foi')
+
+            setAddress({
+                latlng,
+                ...arrAddress[0]
             })
         }
 
@@ -80,13 +91,13 @@ const AlertMap = ({ location }) => {
             <AlertInput
                 label={"Aonde aconteceu?"}
                 placeholder={"Local"}
-                setContent={updateMarker}
+                onBlur={updateMarker}
                 Icon={({ styles }) => <EvilIcons name="location" size={24} color="#211f30" style={styles} />} />
             {mapRegion != null && (
-                <View style={{ borderRadius: 50, borderWidth: 2, overflow: 'hidden', marginTop: 15 }}>
+                <View style={{ borderRadius: 40, borderWidth: 2, overflow: 'hidden', marginTop: 15 }}>
                     <MapView
                         ref={mapRef}
-                        style={{ alignSelf: 'stretch', height: 250 }}
+                        style={{ alignSelf: 'stretch', height: 225 }}
                         customMapStyle={[{ borderRadius: 0 }]}
                         minZoom={10}
                         showsUserLocation={true}

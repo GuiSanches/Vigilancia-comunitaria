@@ -7,9 +7,9 @@ import {
     TouchableOpacity,
     Picker,
     KeyboardAvoidingView,
-    SafeAreaView, 
+    SafeAreaView,
     ScrollView,
-    Alert     
+    Alert
 } from 'react-native';
 import Topbar from '../components/topbar';
 import { withFirebaseHOC } from "../config/Firebase";
@@ -35,7 +35,7 @@ import {
     CustomAreaInputWithImg
 } from "../components/CustomElements";
 
-import * as Location from 'expo-location';
+import axios from 'axios'
 
 export const AlertLayoutScreen = props => {
     const { children } = props
@@ -61,167 +61,182 @@ export const AlertLayoutScreen = props => {
     )
 }
 
-
-
 const Page1 = props => {
-    // const { firebase, children } = props;
     const { firebase, navigation, route: { name } } = props
-    const [location, setLocation] = React.useState(null);
-    const [loading, setLoading] = React.useState(null);
-    const [errorMsg, setErrorMsg] = React.useState(null);
     const [subject, setSubject] = React.useState('');
     const [report, setReport] = React.useState('');
-    const [anonymous, setAnonymous] = React.useState('');
-    
+
     const idx = parseInt(props.route.name.slice(-1)) + 1
-   
-    const updateAnonymous = check => {
-        console.log("anonimo: "+check)
-        setAnonymous(check)
-    }
-
-    const handleNewAlert2=()=>{
-        if(anonymous!=true && anonymous!=false)console.log("não foi clicado")
-        setAnonymous(false)
-        console.log("Assunto2: "+subject)
-        console.log("Anonimo2: "+anonymous)
-    }
-
-    const handleNewAlert = async () => {    
-        // const yourGeoPoint = new GeoPoint(-21.2225, -47.8238);                
-        var addAlert = {        
-        autor: props.firebase.token,
-        anonymous : anonymous,
-        subject : subject,
-        content : report,
-        gravity: 2,
-        comments: 0,
-        upvotes: 0,
-        localizacao : null,
-        uf: "SP",
-        city: "Sanca City",
-        neighborhood : "Na facul",
-        street: "Rua do Meio",
-        deleted: false,
-        deleted_at: null,
-        created_at:	new Date(),
-        updated_at: new Date(),    
-    }
-    console.log(addAlert)
-        try {        
-            var firebaseAddReturn = props.firebase.FIREBASE
-                            .firestore()
-                            .collection("ALERT")
-                            .doc()
-                            .set(addAlert)
-    
-                            Alert.alert(
-                                "Alerta Criado",
-                                "O aviso foi gerado e está disponível em breve!",
-                                [                              
-                                  { text: "Grazasdeus", onPress: () => props.navigation.navigate('Home', { refresh: true }) }
-                                ],
-                                { cancelable: false }
-                              );                       
-                            
-        } catch (error) {
-            Alert.alert(
-                "Erro ao gerar alerta!",
-                error.message,
-                [                              
-                  { text: "Fechar", onPress: () => props.navigation.navigate('Home', { refresh: true }) }
-                ],
-                { cancelable: false }
-              );             
-            throw error
-            //actions.setFieldError("general", error.message);
-        }
-    }
 
     return (
-        <ScrollView>
-            
         <View style={styles.AlertContainer}>
-            <AlertRoundImg />
-
             <View style={styles.AlertBox}>
-                <Text style={styles.AlertaTitle}>Faça um alerta.</Text>
+                <View style={styles.Imgcontainer}>
+                    <AlertRoundImg />
+                </View>
+                <View style={styles.AlertForm1}>
 
-                <View style={styles.AlertForm}>
+                    <Text style={styles.AlertaTitle}>Faça um alerta.</Text>
                     <AlertInput
                         setContent={setSubject}
                         label={"Sobre o que é o alerta?"}
                         placeholder={"Assunto"}
-                        Icon={({ styles }) => <SimpleLineIcons name="note" size={18} color="#40386F" style={styles} />} />
+                        Icon={({ styles }) => <SimpleLineIcons name="note" size={18} color="#40386F" style={styles} />}
+                    />
                     <AlertAreaInput
                         setContent={setReport}
                         label={"Diga o que aconteceu"}
                         placeholder={"Relato"}
                         Icon={({ styles }) => <MaterialCommunityIcons name="comment-text-outline" size={20} color="black" style={styles} />}
-                    />                   
-
+                    />
                 </View>
-   
-                <KeyboardAvoidingView style={styles.AlertForm}>
-                    <AlertDropdown label={"Selecione a gravidade do ocorrido"} arrElements={['Alta', 'Média', 'Baixa', 'Muito Baixa']} />
-                    <AlertMap />                    
-                    <AlertDate label={"Quando ocorreu?"} />
-                    <AlertTime
-                        Icon={({ styles }) => <Feather name="clock" size={18} color="black" style={styles} />}
-                        label={"Em que horário, mais ou menos?"} />
-                    <AlertAnonymousBTN
-                        label={"Publicar em modo anonimo"}                      
-                        onPress={() => updateAnonymous(true)} />                       
+                <View style={styles.Alert1Buttons}>
                     <CustomButton
                         style={styles.AlertButton}
-                        onPress={() =>handleNewAlert2()} title="Criar Alerta" />
-
-                </KeyboardAvoidingView>
+                        onPress={_ => props.navigation.navigate(`Alert-${idx}`, { subject, report })} title="Próximo"
+                    />
+                    <View style={styles.teste1}>
+                        <AlertStatusForm PagesLen={2} currPage={name} inputs={subject, report} navigate={props.navigation.navigate} />
+                        <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
+                            <Text style={styles.back}>Voltar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
-
-            <View style={styles.teste}>              
-                <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
-                    <Text style={styles.back}>Voltar</Text>
-                </TouchableOpacity>
-            </View>
-            
         </View>
-        
-        </ScrollView>
     )
 }
 
-
-
 const Page2 = props => {
-    const { firebase, navigation, route: { name } } = props
+    const { firebase, navigation, route: { name, params } } = props
+    const [severity, setSeverity] = React.useState('')
+    const [address, setAddress] = React.useState('')
+    const [date, setDate] = React.useState(new Date())
+    const [time, setTime] = React.useState('')
+    const [anonymous, setAnonymous] = React.useState(true)
+    const arrElements = ['Alta', 'Média', 'Baixa', 'Muito Baixa']
+
+    React.useEffect(_ => {
+        console.log(params)
+    }, [props])
+
+    const setSeverity_ = v => {
+        const find = arrElements.findIndex(a => v === a)
+        setSeverity(find)
+    }
+
+    const parseDate = _ => {
+        const currDate = new Date()
+        const currMonth = currDate.getMonth()
+        const currYear = currDate.getFullYear()
+        const [day, month] = date
+
+        const alertYear = _ => month > currMonth ? currYear - 1 : currYear
+        console.log(`${alertYear()}-${month}-${day}T${time}Z`)
+        const alertDate = new Date(`${alertYear()}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T${time}Z`)
+        console.log(alertDate)
+        return alertDate
+    }
+    const handleNewAlert = async () => {
+        // const yourGeoPoint = new GeoPoint(-21.2225, -47.8238);
+        let cleaned = ('' + address.postalCode).replace(/\D/g, '');
+        axios.get(`https://viacep.com.br/ws/${cleaned}/json`).then(async res => {
+            const { logradouro, bairro, localidade, uf } = res.data
+
+            const addAlert = {
+                autor: firebase.token,
+                anonymous: anonymous,
+                subject: params.subject,
+                content: params.report,
+                gravity: severity,
+                comments: 0,
+                upvotes: 0,
+                location: address.latlng,
+                cep: cleaned,
+                city: localidade,
+                neighborhood: bairro,
+                street: logradouro,
+                uf,
+                deleted: false,
+                deleted_at: null,
+                date: new Date(parseDate()),
+                created_at: new Date(),
+                updated_at: new Date(),
+            }
+
+            console.log(addAlert)
+            console.log(date, time)
+
+            try {
+                firebase.FIREBASE
+                    .firestore()
+                    .collection("ALERT")
+                    .doc(firebase.token)
+                    .set(addAlert)
+
+                Alert.alert(
+                    "Alerta Criado",
+                    "O aviso foi gerado e estará disponível em breve!",
+                    [
+                        { text: "Ir ao Feed" }
+                    ],
+                    { cancelable: false }
+                );
+
+            } catch (error) {
+                Alert.alert(
+                    "Erro ao gerar alerta!",
+                    error.message,
+                    [
+                        { text: "Fechar" }
+                    ],
+                    { cancelable: false }
+                );
+                throw error
+            }
+        })
+
+    }
     return (
-        <ScrollView>
-        <KeyboardAvoidingView style={styles.AlertContainer}>
-            <View style={styles.AlertBox}>                          
-                <KeyboardAvoidingView style={styles.AlertForm}>
-                    <AlertDropdown label={"Selecione a gravidade do ocorrido"} arrElements={['Alta', 'Média', 'Baixa', 'Muito Baixa']} />
-                    <AlertMap />
-                    <AlertDate label={"Quando ocorreu?"} />
+        <ScrollView contentContainerStyle={styles.AlertContainer}>
+            <View style={styles.AlertBox}>
+                <KeyboardAvoidingView style={styles.AlertForm2}>
+                    <AlertDropdown
+                        setSeverity={setSeverity_}
+                        label={"Selecione a gravidade do ocorrido"}
+                        arrElements={arrElements}
+                    />
+                    <AlertMap
+                        setAddress={setAddress}
+                    />
+                    <AlertDate
+                        setDate={setDate}
+                        label={"Quando ocorreu?"}
+                    />
                     <AlertTime
+                        setTime={setTime}
                         Icon={({ styles }) => <Feather name="clock" size={18} color="black" style={styles} />}
-                        label={"Em que horário, mais ou menos?"} />
+                        label={"Em que horário, mais ou menos?"}
+                    />
                     <AlertAnonymousBTN
                         label={"Publicar em modo anonimo"}
-                        onPress={() => setAnonymous(true)} />
+                        setAnonymous={setAnonymous}
+                    />
                     <CustomButton
                         style={styles.AlertButton}
-                        onPress={() =>handleNewAlert(props)} title="Criar Alerta" />
+                        onPress={handleNewAlert} title="Criar Alerta"
+                    />
+
+                    <View style={styles.teste2}>
+                        <AlertStatusForm PagesLen={2} currPage={name} inputs={{ a: Math.random() }} navigate={navigation.navigate} />
+                        <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.pop()}>
+                            <Text style={styles.back}>Voltar</Text>
+                        </TouchableOpacity>
+                    </View>
 
                 </KeyboardAvoidingView>
             </View>
-            <View style={styles.teste}>
-                <AlertStatusForm PagesLen={2} currPage={name} navigate={navigation.navigate} />
-                <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.pop()}>
-                    <Text style={styles.back}>Voltar</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+
         </ScrollView>
     )
 }
@@ -236,8 +251,8 @@ const AlertPage1 = props => {
 
 const AlertPage2 = props => {
     return (
-        <AlertLayoutScreen>          
-            <Page2 {...props}/>
+        <AlertLayoutScreen>
+            <Page2 {...props} />
         </AlertLayoutScreen>
     )
 }
@@ -260,36 +275,60 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     AlertBox: {
+        flex: 1,
         justifyContent: "space-between",
+        alignItems: 'center'
+    },
+    Imgcontainer: {
+        marginTop: 25,
+        marginBottom: -25
     },
     AlertaTitle: {
         color: 'white',
         fontSize: 20,
         fontFamily: 'serif',
         textAlign: 'left',
-        marginTop: 9,
         marginBottom: 15,
-        marginLeft: 'auto',
-        marginRight: 'auto'
-    },    
-    AlertForm: {
+        marginLeft: 10,
+        alignSelf: 'flex-start'
+    },
+    AlertForm1: {
         width: 240,
+        alignItems: 'center'
+        // borderWidth: 1,   
+    },
+    AlertForm2: {
+        width: 240,
+        flex: 1,
+        // borderWidth: 1,
+        justifyContent: 'space-around',
     },
     AlertButton: {
-        marginTop: 0,
         width: 240,
     },
     BackBtn: {
-        marginTop: 12,
-        alignSelf: 'center'
+        // alignSelf: 'center'
     },
     back: {
         color: 'white',
         textAlign: 'center',
-        marginTop: 12,
-        marginBottom: 12
+        // fontSize: 14
     },
-    teste: {
-        // marginTop: 30,
+    Alert1Buttons: {
+        flex: 0.7,
+        justifyContent: "space-around"
+    },
+    teste1: {
+        // borderWidth: 1,
+        paddingTop: 15,
+        flex: 0.5,
+        justifyContent: 'space-between',
+        paddingBottom: 0
+    },
+    teste2: {
+        // borderWidth: 1,
+        paddingTop: 15,
+        flex: 0.6,
+        justifyContent: 'space-around'
     }
 })

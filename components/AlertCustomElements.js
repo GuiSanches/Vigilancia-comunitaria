@@ -20,7 +20,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { CheckBox } from 'react-native-elements';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-export const AlertInput = ({ label, placeholder, Icon, setContent, type, value }) => {
+export const AlertInput = ({ label, placeholder, Icon, setContent, onBlur, type, value }) => {
     return (
         <View>
             {label && <Text style={styles.AlertInputLabel}>{label}</Text>}
@@ -29,7 +29,8 @@ export const AlertInput = ({ label, placeholder, Icon, setContent, type, value }
                 value={value}
                 Icon={Icon}
                 placeholder={placeholder}
-                setContent={setContent} />
+                setContent={setContent}
+                onBlur={onBlur} />
         </View>
     )
 }
@@ -66,7 +67,7 @@ export const ProfileRoundImg = props => (
     </LinearGradient>
 )
 
-export const AlertStatusForm = ({ PagesLen, currPage, navigate }) => {
+export const AlertStatusForm = ({ PagesLen, currPage, navigate, inputs }) => {
     const idx = parseInt(currPage.slice(-1)) - 1
 
     const generateCurrPage = (PagesLen, currIdx) => {
@@ -75,7 +76,7 @@ export const AlertStatusForm = ({ PagesLen, currPage, navigate }) => {
         for (let i = 0; i < PagesLen; i++) {
             let element = (
                 <TouchableOpacity
-                    onPress={_ => navigate(`Alert-${i + 1}`)}
+                    onPress={_ => navigate(`Alert-${i + 1}`, inputs)}
                     key={`Alert-${i}`}
                     style={[styles.AlertCircle,
                     { width: circleRadius, height: circleRadius },
@@ -98,8 +99,12 @@ export const AlertStatusForm = ({ PagesLen, currPage, navigate }) => {
     )
 }
 
-export const AlertDropdown = ({ arrElements, label }) => {
+export const AlertDropdown = ({ arrElements, setSeverity, label }) => {
     const [curr, setCurr] = React.useState(arrElements[0])
+    const handleChange = value => {
+        setSeverity(value)
+        setCurr(value)
+    }
     return (
         <View>
             <Text style={styles.AlertInputLabel}>{label}</Text>
@@ -111,7 +116,7 @@ export const AlertDropdown = ({ arrElements, label }) => {
                 <Picker
                     selectedValue={curr}
                     style={styles.AlertDropdown}
-                    onValueChange={(itemValue, itemIndex) => setCurr(itemValue)}>
+                    onValueChange={(itemValue, itemIndex) => handleChange(itemValue)}>
                     {arrElements.map(label => (
                         <Picker.Item key={label} label={label} value={label} />
                     ))}
@@ -122,21 +127,35 @@ export const AlertDropdown = ({ arrElements, label }) => {
     )
 }
 
-export const AlertDate = ({ label }) => {
+export const AlertDate = ({ label, setDate }) => {
     const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
     const getDayIdx = _ => 5
     const [curr, setCurr] = React.useState(months[getDayIdx()])
+    const [inputs, setInputs] = React.useState([])
+
+    const handleChange = (value, idx) => {
+        setContent(idx, 1)
+        setCurr(value)
+    }
+
+    const setContent = (value, idx) => {
+        const input = inputs
+        input[idx] = value
+
+        setInputs(input)
+        setDate(input)
+    }
 
     return (
         <View style={{ marginTop: 5 }}>
             <Text style={styles.AlertInputLabel}>{label}</Text>
             <View style={styles.AlertDate}>
-                <CustomMiniInput label={"Dia"} />
+                <CustomMiniInput setContent={v => setContent(v, 0)} label={"Dia"} />
                 <View style={[styles.AlertDropdownBox, styles.AlertDropdownDateBox]}>
                     <Picker
                         selectedValue={curr}
                         style={[styles.AlertDropdown, styles.AlertDropdownDate]}
-                        onValueChange={(itemValue, itemIndex) => setCurr(itemValue)}>
+                        onValueChange={(itemValue, itemIndex) => handleChange(itemValue, itemIndex)}>
                         {months.map(label => (
                             <Picker.Item key={label} label={label} value={label} />
                         ))}
@@ -148,7 +167,13 @@ export const AlertDate = ({ label }) => {
     )
 }
 
-export const AlertTime = ({ label, Icon }) => {
+export const AlertTime = ({ label, Icon, setTime }) => {
+    const [value, setValue] = React.useState('')
+
+    const handleChange = value => {
+        setTime(value)
+        setValue(value)
+    }
 
     return (
         <View style={styles.AlertTimeContainer}>
@@ -157,7 +182,8 @@ export const AlertTime = ({ label, Icon }) => {
                 <View style={styles.AlertTimeIcon}>
                     <Icon styles={{ textAlign: 'center' }} />
                 </View>
-                <TextInput style={{ color: 'white' }} placeholder={"Horario"} />
+                <TextInput
+                    value={value} onChangeText={handleChange} style={{ color: 'white' }} placeholder={"hh:mm"} />
             </View>
         </View>
 
@@ -179,6 +205,11 @@ export const AlertAnonymousBTN = ({ setAnonymous, label }) => {
         </TouchableOpacity>
     )
 
+    const handleCheck = _ => {
+        setAnonymous(!checked)
+        setChecked(!checked)
+    }
+
     return (
         <View>
             <View style={styles.item} >
@@ -187,7 +218,7 @@ export const AlertAnonymousBTN = ({ setAnonymous, label }) => {
                     color="#fc5185"
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
-                    onPress={() => setChecked(!checked)} />
+                    onPress={handleCheck} />
                 <Text style={
                     {
                         ...styles.checkBoxTxt,
@@ -248,7 +279,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     AlertPageStatus: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        width: 40,
+        justifyContent: 'space-between',
+        borderColor: 'red'
     },
     AlertCirclesBox: {
         flexDirection: 'row',
@@ -288,7 +322,7 @@ const styles = StyleSheet.create({
     },
     AlertDate: {
         flexDirection: 'row',
-        justifyContent: 'space-between',        
+        justifyContent: 'space-between',
         // borderWidth: 1
     },
     AlertDropdownDateBox: {
