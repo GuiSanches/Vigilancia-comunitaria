@@ -43,8 +43,8 @@ const Firebase = {
       firebase
         .firestore()
         .collection("USER")
-        .doc(response.user.uid)
-        .set(userData)
+        .doc(response.user.uid)//
+        .set(userData)//
         return response.user.uid
     } catch (e) {
       throw e

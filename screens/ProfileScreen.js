@@ -21,8 +21,9 @@ const PreviousPage = ({ navigation, title }) => (
         </TouchableOpacity>
     </View>
 )
+//<SimpleLineIcons name="logout" size={24} color="white" />
 //<ProfileFormData listLabel={parseUserData} />
-const ProfileScreen = ({ navigation, firebase }) => {
+const ProfileScreen = ({ navigation, firebase, userData }) => {
     const [parseUserData, setParseUserData] = React.useState([
         firebase.user.email,
         firebase.user.phone,
@@ -32,7 +33,52 @@ const ProfileScreen = ({ navigation, firebase }) => {
         firebase.user.street + ' nº ' + firebase.user.number
     ])
 
-    var number = firebase.user.number.toString()
+    
+    
+    
+    //states usados para Update
+    const [email, setEmail] = React.useState(firebase.user.email);
+    const [phone, setPhone] = React.useState(firebase.user.phone);
+    const [cep, setCep] = React.useState(firebase.user.cep);
+    const [city, setCity] = React.useState(firebase.user.city);
+    const [uf, setUf] = React.useState(firebase.user.uf);
+    const [street, setStreet] = React.useState(firebase.user.street);
+    const [neightborhood, setNeightborhood] = React.useState(firebase.user.neightborhood);
+    const [numberHome, setNumberHome] = React.useState(firebase.user.number.toString());
+    
+    const update = async _ => {
+        var date = new Date().getDate();
+        var month = new Date().getMonth() + 1;
+        var year = new Date().getFullYear();
+
+        try {
+            var updateOption = firebase.FIREBASE
+              .firestore()
+              .collection("USER")
+              .doc(firebase.token)
+              console.log("sucesso")
+            
+            return updateOption.update({
+                cep: cep,
+                city: city,
+                created_at: {
+                  nanoseconds: 336000000,
+                  seconds: 1593556855,
+                },
+                number: numberHome,
+                phone: phone,
+                street: street,
+                uf: uf ,
+                updated_at: date + '-' + month + '-' + year,
+            })
+              
+        } 
+        catch (e) {
+            return console.log("erro")
+            //console.log(Object)
+        }
+    }
+
     return (
         <View style={{ flex: 1, paddingTop: 0, zIndex: 5 }}>
             <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />
@@ -49,39 +95,23 @@ const ProfileScreen = ({ navigation, firebase }) => {
                                 <Entypo name="mail"  size={24} color="purple"/>
                                 <Text style={styles.text}> Email: </Text>
                             </View>
-                            <Text>{firebase.user.email}</Text>
+                            <Text>{email}</Text>
                         </View>
-
-                        <View style={styles.linha}>
-                            <View style={styles.linhaFilho}>
-                                <Feather name="smartphone" size={22} color="purple" />
-                                <Text style={styles.text}> Tel: </Text>
-                            </View>
-                            <TextInput style={styles.text2} placeholder={firebase.user.phone}></TextInput>
-                        </View>
-
+                       
                         <View style={styles.linha}>
                             <View style={styles.linhaFilho}>
                                 <Entypo name="location" size={22} color="purple"></Entypo>
                                 <Text style={styles.text}> CEP: </Text>
                             </View>
-                            <TextInput style={styles.text2} placeholder={firebase.user.cep}></TextInput>
+                            <TextInput style={styles.text2} defaultValue={cep} onChangeText={text => setCep(text)} placeholder={cep}></TextInput>
                         </View>
-
+                     
                         <View style={styles.linha}>
                             <View style={styles.linhaFilho}>
-                                <MaterialCommunityIcons name="numeric" size={22} color="purple" />
-                                <Text style={styles.text}> Nº: </Text>
+                                <Entypo name="map" size={22} color="purple" />
+                                <Text style={styles.text}> UF: </Text>
                             </View>
-                            <TextInput style={styles.text2} placeholder={number}></TextInput>
-                        </View>
-
-                        <View style={styles.linha}>
-                            <View style={styles.linhaFilho}>
-                                <MaterialIcons name="location-city" size={22} color="purple" />  
-                                <Text style={styles.text}> NBHD: </Text>
-                            </View>
-                            <TextInput style={styles.text2} placeholder={firebase.user.neightborhood}></TextInput>
+                            <TextInput style={styles.text2} defaultValue={uf} onChangeText={text => setUf(text)} placeholder={uf}></TextInput>
                         </View>
 
                         <View style={styles.linha}>
@@ -89,20 +119,35 @@ const ProfileScreen = ({ navigation, firebase }) => {
                                 <Entypo name="address" size={22} color="purple" />
                                 <Text style={styles.text}> City: </Text>
                             </View>
-                            <TextInput style={styles.text2} placeholder={firebase.user.city}></TextInput>
+                            <TextInput style={styles.text2} defaultValue={city} onChangeText={text => setCity(text)} placeholder={city}></TextInput>
                         </View>
-                        
+
                         <View style={styles.linha}>
                             <View style={styles.linhaFilho}>
-                                <Entypo name="map" size={22} color="purple" />
-                                <Text style={styles.text}> UF: </Text>
+                                <MaterialIcons name="location-city" size={22} color="purple" />  
+                                <Text style={styles.text}> NBHD: </Text>
                             </View>
-                            <TextInput style={styles.text2} placeholder={firebase.user.uf}></TextInput>
+                            <TextInput style={styles.text2} defaultValue={street} onChangeText={text => setStreet(text)} placeholder={street}></TextInput>
+                        </View>
+
+                        <View style={styles.linha}>
+                            <View style={styles.linhaFilho}>
+                                <MaterialCommunityIcons name="numeric" size={22} color="purple" />
+                                <Text style={styles.text}> Nº: </Text>
+                            </View>
+                            <TextInput style={styles.text2} defaultValue={numberHome} onChangeText={text => setNumberHome(text)} placeholder={numberHome}></TextInput>
+                        </View>
+
+                        <View style={styles.linha}>
+                            <View style={styles.linhaFilho}>
+                                <Feather name="smartphone" size={22} color="purple" />
+                                <Text style={styles.text}> Tel: </Text>
+                            </View>
+                            <TextInput style={styles.text2} defaultValue={phone} onChangeText={text => setPhone(text)} placeholder={phone}></TextInput>
                         </View>
                     </View>
 
-                    <TouchableOpacity style={styles.OutBtn}>
-                        <SimpleLineIcons name="logout" size={24} color="white" />
+                    <TouchableOpacity style={styles.OutBtn} onPress={update}>
                         <Text style={styles.OutBtnTxt}>SALVAR</Text>
                     </TouchableOpacity>
                 </View>
@@ -168,6 +213,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     linhaFilho:{
+        top: 3,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },

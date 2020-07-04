@@ -14,6 +14,7 @@ const FirebaseProviderComponent = ({ setLoggedIn, children }) => {
 
   React.useEffect(_ => {
     getUserDataStorage()
+    console.log(user)
   }, [])
 
   React.useEffect(_ => {
@@ -61,6 +62,7 @@ const FirebaseProviderComponent = ({ setLoggedIn, children }) => {
         const user = await AsyncStorage.getItem('user')
         setToken_(token)
         setUser(JSON.parse(user))
+        console.log(JSON.parse(user))
         setLoggedIn(true)
       }
     } catch (e) {
