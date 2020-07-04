@@ -21,7 +21,7 @@ const DrawerNavigator = ({firebase, ...props}) => {
                 .FIREBASE
                 .firestore()
                 .collection("USER")
-                .doc('2ytPUBqF8jNjhy5aUxDdI0Qh0GO2')
+                .doc(firebase.token)
                 .get().then(function (doc) {
                     if (doc.exists) {
                         let userDoc = doc.data()
@@ -31,7 +31,7 @@ const DrawerNavigator = ({firebase, ...props}) => {
                     }
                 })
         } catch (e) {
-            console.log(e)
+            console.log('erro')
         }
 
     }, [])

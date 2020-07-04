@@ -29,10 +29,10 @@ const LoginScreen = (props) => {
 
     const handleOnLogin = async _ => {
         try {
-            const response = await firebase.loginWithEmail(email, password);   
+            const response = await firebase.loginWithEmail(email, password);
             if (response.user) {
+                firebase.setToken(response.user.uid)
                 Alert.alert(`Bem vindo ${response.user.email}`)
-                firebase.setLogged(true)
             } else {
             }
         } catch (error) {

@@ -83,7 +83,7 @@ const AlertMap = ({ location }) => {
                 setContent={updateMarker}
                 Icon={({ styles }) => <EvilIcons name="location" size={24} color="#211f30" style={styles} />} />
             {mapRegion != null && (
-                <View style={{ borderRadius: 50, borderWidth: 2, overflow: 'hidden', marginTop: 4 }}>
+                <View style={{ borderRadius: 50, borderWidth: 2, overflow: 'hidden', marginTop: 15 }}>
                     <MapView
                         ref={mapRef}
                         style={{ alignSelf: 'stretch', height: 250 }}
