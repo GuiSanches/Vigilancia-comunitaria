@@ -16,10 +16,14 @@ const Topbar = props => {
     const handleToggle = e => {
         try {
             props.navigation.toggleDrawer()
-        }catch(e) {
+        } catch (e) {
             Alert.alert('Você precisa estar logado para acessar todas as funções')
         }
-        
+    }
+
+    const handleRefresh = _ => {
+        if (props.handleRefresh)
+            props.handleRefresh()
     }
 
     return (
@@ -28,7 +32,10 @@ const Topbar = props => {
                 <Ionicons name="md-menu" size={24} color="white" />
             </TouchableOpacity>
 
-            <Image style={styles.logo} source={logo} />
+            <TouchableOpacity onPress={handleRefresh}>
+                <Image style={styles.logo} source={logo} />
+            </TouchableOpacity>
+
             <Ionicons name="md-help-circle-outline" size={24} color="white" />
         </View>
     )
