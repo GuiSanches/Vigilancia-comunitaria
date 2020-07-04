@@ -47,10 +47,6 @@ const ProfileScreen = ({ navigation, firebase, userData }) => {
     const [numberHome, setNumberHome] = React.useState(firebase.user.number.toString());
     
     const update = async _ => {
-        var date = new Date().getDate();
-        var month = new Date().getMonth() + 1;
-        var year = new Date().getFullYear();
-
         try {
             var updateOption = firebase.FIREBASE
               .firestore()
@@ -61,15 +57,11 @@ const ProfileScreen = ({ navigation, firebase, userData }) => {
             return updateOption.update({
                 cep: cep,
                 city: city,
-                created_at: {
-                  nanoseconds: 336000000,
-                  seconds: 1593556855,
-                },
                 number: numberHome,
                 phone: phone,
                 street: street,
                 uf: uf ,
-                updated_at: date + '-' + month + '-' + year,
+                updated_at: new Date(),
             })
               
         } 
