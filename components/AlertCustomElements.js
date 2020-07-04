@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     },
     AlertDate: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between',        
         // borderWidth: 1
     },
     AlertDropdownDateBox: {

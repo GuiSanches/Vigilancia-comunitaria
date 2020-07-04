@@ -6,7 +6,10 @@ import {
     StatusBar,
     TouchableOpacity,
     Picker,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    SafeAreaView, 
+    ScrollView,
+    Alert     
 } from 'react-native';
 import Topbar from '../components/topbar';
 import { withFirebaseHOC } from "../config/Firebase";
@@ -58,18 +61,86 @@ export const AlertLayoutScreen = props => {
     )
 }
 
+
+
 const Page1 = props => {
-    const { firebase, children } = props;
-    const { navigation, route: { name } } = props
+    // const { firebase, children } = props;
+    const { firebase, navigation, route: { name } } = props
     const [location, setLocation] = React.useState(null);
     const [loading, setLoading] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
     const [subject, setSubject] = React.useState('');
     const [report, setReport] = React.useState('');
-
-    const idx = parseInt(props.route.name.slice(-1)) + 1
+    const [anonymous, setAnonymous] = React.useState('');
     
+    const idx = parseInt(props.route.name.slice(-1)) + 1
+   
+    const updateAnonymous = check => {
+        console.log("anonimo: "+check)
+        setAnonymous(check)
+    }
+
+    const handleNewAlert2=()=>{
+        if(anonymous!=true && anonymous!=false)console.log("não foi clicado")
+        setAnonymous(false)
+        console.log("Assunto2: "+subject)
+        console.log("Anonimo2: "+anonymous)
+    }
+
+    const handleNewAlert = async () => {    
+        // const yourGeoPoint = new GeoPoint(-21.2225, -47.8238);                
+        var addAlert = {        
+        autor: props.firebase.token,
+        anonymous : anonymous,
+        subject : subject,
+        content : report,
+        gravity: 2,
+        comments: 0,
+        upvotes: 0,
+        localizacao : null,
+        uf: "SP",
+        city: "Sanca City",
+        neighborhood : "Na facul",
+        street: "Rua do Meio",
+        deleted: false,
+        deleted_at: null,
+        created_at:	new Date(),
+        updated_at: new Date(),    
+    }
+    console.log(addAlert)
+        try {        
+            var firebaseAddReturn = props.firebase.FIREBASE
+                            .firestore()
+                            .collection("ALERT")
+                            .doc()
+                            .set(addAlert)
+    
+                            Alert.alert(
+                                "Alerta Criado",
+                                "O aviso foi gerado e está disponível em breve!",
+                                [                              
+                                  { text: "Grazasdeus", onPress: () => props.navigation.navigate('Home', { refresh: true }) }
+                                ],
+                                { cancelable: false }
+                              );                       
+                            
+        } catch (error) {
+            Alert.alert(
+                "Erro ao gerar alerta!",
+                error.message,
+                [                              
+                  { text: "Fechar", onPress: () => props.navigation.navigate('Home', { refresh: true }) }
+                ],
+                { cancelable: false }
+              );             
+            throw error
+            //actions.setFieldError("general", error.message);
+        }
+    }
+
     return (
+        <ScrollView>
+            
         <View style={styles.AlertContainer}>
             <AlertRoundImg />
 
@@ -87,31 +158,47 @@ const Page1 = props => {
                         label={"Diga o que aconteceu"}
                         placeholder={"Relato"}
                         Icon={({ styles }) => <MaterialCommunityIcons name="comment-text-outline" size={20} color="black" style={styles} />}
-                    />
-
-                    <CustomButton
-                        style={styles.AlertButton}
-                        onPress={_ => props.navigation.navigate(`Alert-${idx}`)} title="Próximo" />
+                    />                   
 
                 </View>
+   
+                <KeyboardAvoidingView style={styles.AlertForm}>
+                    <AlertDropdown label={"Selecione a gravidade do ocorrido"} arrElements={['Alta', 'Média', 'Baixa', 'Muito Baixa']} />
+                    <AlertMap />                    
+                    <AlertDate label={"Quando ocorreu?"} />
+                    <AlertTime
+                        Icon={({ styles }) => <Feather name="clock" size={18} color="black" style={styles} />}
+                        label={"Em que horário, mais ou menos?"} />
+                    <AlertAnonymousBTN
+                        label={"Publicar em modo anonimo"}                      
+                        onPress={() => updateAnonymous(true)} />                       
+                    <CustomButton
+                        style={styles.AlertButton}
+                        onPress={() =>handleNewAlert2()} title="Criar Alerta" />
+
+                </KeyboardAvoidingView>
             </View>
 
-            <View style={styles.teste}>
-                <AlertStatusForm PagesLen={2} currPage={name} navigate={props.navigation.navigate} />
+            <View style={styles.teste}>              
                 <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
                     <Text style={styles.back}>Voltar</Text>
                 </TouchableOpacity>
             </View>
+            
         </View>
+        
+        </ScrollView>
     )
 }
 
-const Page2 = props => {
-    const { navigation, route: { name } } = props
-    return (
-        <KeyboardAvoidingView style={styles.AlertContainer}>
-            <View style={styles.AlertBox}>
 
+
+const Page2 = props => {
+    const { firebase, navigation, route: { name } } = props
+    return (
+        <ScrollView>
+        <KeyboardAvoidingView style={styles.AlertContainer}>
+            <View style={styles.AlertBox}>                          
                 <KeyboardAvoidingView style={styles.AlertForm}>
                     <AlertDropdown label={"Selecione a gravidade do ocorrido"} arrElements={['Alta', 'Média', 'Baixa', 'Muito Baixa']} />
                     <AlertMap />
@@ -121,10 +208,10 @@ const Page2 = props => {
                         label={"Em que horário, mais ou menos?"} />
                     <AlertAnonymousBTN
                         label={"Publicar em modo anonimo"}
-                        setAnonymous={_ => { }} />
+                        onPress={() => setAnonymous(true)} />
                     <CustomButton
                         style={styles.AlertButton}
-                        onPress={_ => props.navigation.navigate(`Home`)} title="Criar Alerta" />
+                        onPress={() =>handleNewAlert(props)} title="Criar Alerta" />
 
                 </KeyboardAvoidingView>
             </View>
@@ -135,6 +222,7 @@ const Page2 = props => {
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
+        </ScrollView>
     )
 }
 
@@ -148,8 +236,8 @@ const AlertPage1 = props => {
 
 const AlertPage2 = props => {
     return (
-        <AlertLayoutScreen>
-            <Page2 {...props} />
+        <AlertLayoutScreen>          
+            <Page2 {...props}/>
         </AlertLayoutScreen>
     )
 }
@@ -181,13 +269,14 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginTop: 9,
         marginBottom: 15,
-        marginLeft: 10
-    },
+        marginLeft: 'auto',
+        marginRight: 'auto'
+    },    
     AlertForm: {
         width: 240,
     },
     AlertButton: {
-        marginTop: 30,
+        marginTop: 0,
         width: 240,
     },
     BackBtn: {
@@ -197,6 +286,8 @@ const styles = StyleSheet.create({
     back: {
         color: 'white',
         textAlign: 'center',
+        marginTop: 12,
+        marginBottom: 12
     },
     teste: {
         // marginTop: 30,
