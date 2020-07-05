@@ -44,8 +44,11 @@ const FeedScreen = props => {
     const { navigation, firebase, user } = props;
     const [isRefreshing, setRefreshing] = React.useState(false)
     const [allPost, setAllPost] = React.useState([])
-    const [posts, setPosts] = React.useState(data.slice(0, 5))
+    const [posts, setPosts] = React.useState([])
 
+    React.useEffect(_ => {
+        handleRefresh()
+    }, [])
     const getProducts = async _ => {
         console.log("props.firebase.user.city: " + firebase.user.city)
         if (posts.length < allPost.length) {
@@ -60,7 +63,8 @@ const FeedScreen = props => {
         console.log("props.firebase.user.city: " + firebase.user.city)
         setRefreshing(true)
         let newPosts = await RefreshPosts()
-        setPosts(newPosts)
+        setAllPost(newPosts)
+        setPosts(newPosts.slice(0, 5))
         setRefreshing(false)
     }
 

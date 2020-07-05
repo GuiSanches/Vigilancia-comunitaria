@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Text, TouchableOpacity, TextInput, StyleSheet, View, Image } from 'react-native'
+import { Text, TouchableOpacity, TextInput, StyleSheet, View, Image, Platform } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 
 export const CustomText = props => {
@@ -131,7 +131,9 @@ export const CustomMiniInput = props => {
   }
 
   return (
-    <TextInput placeholder={label} value={value} onChangeText={handleChange} style={styles.CustomMiniInput} />
+    <TextInput
+      keyboardType={Platform.OS !== 'ios' ? "numeric" : "number-pad"}
+      placeholder={label} value={value} onChangeText={handleChange} style={styles.CustomMiniInput} />
   )
 }
 

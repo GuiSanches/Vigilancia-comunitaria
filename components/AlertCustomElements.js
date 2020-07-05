@@ -150,7 +150,7 @@ export const AlertDate = ({ label, setDate }) => {
         <View style={{ marginTop: 5 }}>
             <Text style={styles.AlertInputLabel}>{label}</Text>
             <View style={styles.AlertDate}>
-                <CustomMiniInput setContent={v => setContent(v, 0)} label={"Dia"} />
+                <CustomMiniInput setContent={v => setContent(v, 0)} label={"Dia"} numeric={true} />
                 <View style={[styles.AlertDropdownBox, styles.AlertDropdownDateBox]}>
                     <Picker
                         selectedValue={curr}
