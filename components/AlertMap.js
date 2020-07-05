@@ -94,7 +94,7 @@ const AlertMap = ({ location, setAddress }) => {
                 onBlur={updateMarker}
                 Icon={({ styles }) => <EvilIcons name="location" size={24} color="#211f30" style={styles} />} />
             {mapRegion != null && (
-                <View style={{ borderRadius: 40, borderWidth: 2, overflow: 'hidden', marginTop: 15 }}>
+                <View style={{ borderRadius: 20, borderWidth: 2, overflow: 'hidden', marginTop: 15}}>
                     <MapView
                         ref={mapRef}
                         style={{ alignSelf: 'stretch', height: 225 }}

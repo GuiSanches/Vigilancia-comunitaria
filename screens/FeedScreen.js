@@ -6,7 +6,8 @@ import {
     View,
     ScrollView,
     FlatList,
-    StatusBar
+    StatusBar,
+    Alert
 } from 'react-native';
 import {
     CustomText,
@@ -32,34 +33,95 @@ const postTemplate = {
     location: 'Saída mat',
     content: 'GENTE agora de pouco entraram na minha rep, fica na alexandrina na altura do cinema mais ou menos, a polícia conseguiu prender um e tem 2 que conseguiram fugir. Ontem foram la uma menina com um cara dizendo q ficou sabendo que precisava de vagas, que falou com uma das meninas da casa e não lembrava quem era e queria ver, sendo que não tinha e nem ngm havia falado com ela, não deixamos entrar porém não adiantou.... então tomem cuidado e não caiam nessa cilada!!'
 }
+
 const data = Array.from({
     length: 20
 }, _ => postTemplate)
 
+
+
 const FeedScreen = props => {
-    const { navigation, firebase } = props;
+    const { navigation, firebase, user } = props;
     const [isRefreshing, setRefreshing] = React.useState(false)
+    const [allPost, setAllPost] = React.useState([])
     const [posts, setPosts] = React.useState(data.slice(0, 5))
 
     const getProducts = async _ => {
-        if (posts.length < 30) {
+        console.log("props.firebase.user.city: " + firebase.user.city)
+        if (posts.length < allPost.length) {
             setRefreshing(true)
             await new Promise(r => setTimeout(r, 700));
-            setPosts(data.slice(0, posts.length + 5))
+            setPosts(allPost.slice(0, posts.length + 5))
             setRefreshing(false)
         }
     }
 
     const handleRefresh = async _ => {
+        console.log("props.firebase.user.city: " + firebase.user.city)
         setRefreshing(true)
-        setPosts(data.slice(0, 5))
+        let newPosts = await RefreshPosts()
+        setPosts(newPosts)
         setRefreshing(false)
+    }
+
+    const RefreshPosts = async _ => {
+        try {
+            console.log("Local city: " + firebase.user.city)
+            console.log("Comando Retornado do fireBase!: ")
+            const QuerySnaphot = await firebase.FIREBASE
+                .firestore()
+                .collection("ALERT")
+                .where('deleted', '==', false)
+                // .where('city', '==', firebase.user.city)
+                .limit(150)
+                .get()
+
+            const documents = QuerySnaphot
+                .docs // Array QueryDocumentSnapshot
+                .map(document => {
+                    const alert = document.data()
+                    return ({
+                        id: 0,
+                        user: {
+                            name: 'Anônimo',
+                            img: gatao
+                        },
+                        title: alert.subject || '',
+                        date: `há ${5 + parseInt(Math.random() * 10)} minutos`,
+                        labels: ['assalto', 'animal louco', 'iluminação'],
+                        location: alert.neighborhood || '',
+                        content: alert.content || '',
+                        upvotes: alert.upvotes
+                    })
+                })
+
+            console.log(documents)
+
+            return documents
+        }
+        catch (e) {
+            Alert.alert(
+                "Erro ao atualizar feed!",
+                e.message,
+                [
+                    {
+                        text: "Tentar novamente",
+                        onPress: () => handleRefresh()
+                    },
+                    { text: "Fechar" }
+                ],
+                { cancelable: false }
+            );
+            console.log(e.message)
+            //console.log(Object)
+        }
+        return []
     }
 
     return (
         <View style={{ flex: 1, paddingTop: 0, zIndex: 5 }}>
             <StatusBar barStyle="dark-content" backgroundColor="#8e2e9c" />
-            <Topbar navigation={navigation} />
+            <Topbar navigation={navigation} handleRefresh={handleRefresh} />
             <View style={styles.container}>
                 <FlatList
                     data={posts}

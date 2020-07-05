@@ -9,10 +9,17 @@ const FeedCard = ({ postData }) => {
     const { Reactions, comments, content, user, title, date, location, labels, id } = postData;
     const emptyClass = ["-empty", '']
     const [isEmpty, setIsEmpty] = React.useState(emptyClass[0])
+    const [upvotes, setUpvotes] = React.useState(postData.upvotes)
 
     const handleLike = _ => {
-        if (isEmpty == emptyClass[0]) setIsEmpty(emptyClass[1])
-        else setIsEmpty(emptyClass[0])
+        if (isEmpty == emptyClass[0]) {
+            setIsEmpty(emptyClass[1])
+            setUpvotes(upvotes + 1)
+        }
+        else {
+            setIsEmpty(emptyClass[0])
+            setUpvotes(upvotes - 1)
+        }
     }
     return (
         <View style={styles.card}>
@@ -39,11 +46,11 @@ const FeedCard = ({ postData }) => {
                     <TouchableOpacity onPress={handleLike}>
                         <Ionicons style={styles.postIcon} name={`md-heart${isEmpty}`} size={20} color="#791DD1" />
                     </TouchableOpacity>
-                    <Text>4</Text>
+                    <Text>{upvotes}</Text>
                 </View>
                 <View style={styles.reactionItem}>
                     <EvilIcons style={{ ...styles.postIcon, paddingHorizontal: 4 }} name="comment" size={24} color="black" />
-                    <Text>1</Text>
+                    <Text>0</Text>
                 </View>
 
             </View>

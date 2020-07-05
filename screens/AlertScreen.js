@@ -69,6 +69,7 @@ const Page1 = props => {
     const idx = parseInt(props.route.name.slice(-1)) + 1
 
     return (
+        <ScrollView>
         <View style={styles.AlertContainer}>
             <View style={styles.AlertBox}>
                 <View style={styles.Imgcontainer}>
@@ -94,7 +95,7 @@ const Page1 = props => {
                     <CustomButton
                         style={styles.AlertButton}
                         onPress={_ => props.navigation.navigate(`Alert-${idx}`, { subject, report })} title="Próximo"
-                    />
+                    />                    
                     <View style={styles.teste1}>
                         <AlertStatusForm PagesLen={2} currPage={name} inputs={subject, report} navigate={props.navigation.navigate} />
                         <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
@@ -104,6 +105,7 @@ const Page1 = props => {
                 </View>
             </View>
         </View>
+        </ScrollView>
     )
 }
 
@@ -198,7 +200,7 @@ const Page2 = props => {
 
     }
     return (
-        <ScrollView contentContainerStyle={styles.AlertContainer}>
+        <ScrollView>
             <View style={styles.AlertBox}>
                 <KeyboardAvoidingView style={styles.AlertForm2}>
                     <AlertDropdown
@@ -207,7 +209,7 @@ const Page2 = props => {
                         arrElements={arrElements}
                     />
                     <AlertMap
-                        setAddress={setAddress}
+                        setAddress={setAddress}                   
                     />
                     <AlertDate
                         setDate={setDate}
@@ -225,7 +227,7 @@ const Page2 = props => {
                     <CustomButton
                         style={styles.AlertButton}
                         onPress={handleNewAlert} title="Criar Alerta"
-                    />
+                    />                    
 
                     <View style={styles.teste2}>
                         <AlertStatusForm PagesLen={2} currPage={name} inputs={{ a: Math.random() }} navigate={navigation.navigate} />
@@ -289,8 +291,8 @@ const styles = StyleSheet.create({
         fontFamily: 'serif',
         textAlign: 'left',
         marginBottom: 15,
-        marginLeft: 10,
-        alignSelf: 'flex-start'
+        marginLeft: 'auto',
+        marginRight: 'auto'
     },
     AlertForm1: {
         width: 240,
@@ -305,6 +307,7 @@ const styles = StyleSheet.create({
     },
     AlertButton: {
         width: 240,
+        marginTop:10
     },
     BackBtn: {
         // alignSelf: 'center'
@@ -316,7 +319,7 @@ const styles = StyleSheet.create({
     },
     Alert1Buttons: {
         flex: 0.7,
-        justifyContent: "space-around"
+        justifyContent: "space-around"        
     },
     teste1: {
         // borderWidth: 1,
@@ -329,6 +332,6 @@ const styles = StyleSheet.create({
         // borderWidth: 1,
         paddingTop: 15,
         flex: 0.6,
-        justifyContent: 'space-around'
-    }
+        justifyContent: 'space-around'      
+    }   
 })
