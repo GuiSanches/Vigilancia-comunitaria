@@ -1,13 +1,13 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Ionicons, EvilIcons } from '@expo/vector-icons';
+import { FontAwesome, EvilIcons } from '@expo/vector-icons';
 // Reações, comentários, conteudo, usuario(nome, foto), titulo, horario, 
 // localização, labels(Iluminação, furto...)
 
 const FeedCard = ({ postData }) => {
     const { Reactions, comments, content, user, title, date, location, labels, id } = postData;
-    const emptyClass = ["-empty", '']
+    const emptyClass = ["o-", '']
     const [isEmpty, setIsEmpty] = React.useState(emptyClass[0])
     const [upvotes, setUpvotes] = React.useState(postData.upvotes)
 
@@ -44,7 +44,8 @@ const FeedCard = ({ postData }) => {
 
                 <View style={styles.reactionItem}>
                     <TouchableOpacity onPress={handleLike}>
-                        <Ionicons style={styles.postIcon} name={`md-heart${isEmpty}`} size={20} color="#791DD1" />
+                        <FontAwesome name={`arrow-circle-${isEmpty}up`} size={22} color="black" />
+                        {/* <Ionicons style={styles.postIcon} name={`md-heart${isEmpty}`} size={20} color="#791DD1" /> */}
                     </TouchableOpacity>
                     <Text>{upvotes}</Text>
                 </View>
@@ -121,7 +122,9 @@ const styles = StyleSheet.create({
     reactionItem: {
         alignItems: 'center',
         flexDirection: 'row',
-        marginHorizontal: 5,
+        justifyContent: 'space-between',
+        flex: 0.2,
+        marginHorizontal:5,
     },
     postIcon: {
         borderRadius: 100,
