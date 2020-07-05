@@ -70,41 +70,41 @@ const Page1 = props => {
 
     return (
         <ScrollView>
-        <View style={styles.AlertContainer}>
-            <View style={styles.AlertBox}>
-                <View style={styles.Imgcontainer}>
-                    <AlertRoundImg />
-                </View>
-                <View style={styles.AlertForm1}>
+            <View style={styles.AlertContainer}>
+                <View style={styles.AlertBox}>
+                    <View style={styles.Imgcontainer}>
+                        <AlertRoundImg />
+                    </View>
+                    <View style={styles.AlertForm1}>
 
-                    <Text style={styles.AlertaTitle}>Faça um alerta.</Text>
-                    <AlertInput
-                        setContent={setSubject}
-                        label={"Sobre o que é o alerta?"}
-                        placeholder={"Assunto"}
-                        Icon={({ styles }) => <SimpleLineIcons name="note" size={18} color="#40386F" style={styles} />}
-                    />
-                    <AlertAreaInput
-                        setContent={setReport}
-                        label={"Diga o que aconteceu"}
-                        placeholder={"Relato"}
-                        Icon={({ styles }) => <MaterialCommunityIcons name="comment-text-outline" size={20} color="black" style={styles} />}
-                    />
-                </View>
-                <View style={styles.Alert1Buttons}>
-                    <CustomButton
-                        style={styles.AlertButton}
-                        onPress={_ => props.navigation.navigate(`Alert-${idx}`, { subject, report })} title="Próximo"
-                    />                    
-                    <View style={styles.teste1}>
-                        <AlertStatusForm PagesLen={2} currPage={name} inputs={subject, report} navigate={props.navigation.navigate} />
-                        <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
-                            <Text style={styles.back}>Voltar</Text>
-                        </TouchableOpacity>
+                        <Text style={styles.AlertaTitle}>Faça um alerta.</Text>
+                        <AlertInput
+                            setContent={setSubject}
+                            label={"Sobre o que é o alerta?"}
+                            placeholder={"Assunto"}
+                            Icon={({ styles }) => <SimpleLineIcons name="note" size={18} color="#40386F" style={styles} />}
+                        />
+                        <AlertAreaInput
+                            setContent={setReport}
+                            label={"Diga o que aconteceu"}
+                            placeholder={"Relato"}
+                            Icon={({ styles }) => <MaterialCommunityIcons name="comment-text-outline" size={20} color="black" style={styles} />}
+                        />
+                    </View>
+                    <View style={styles.Alert1Buttons}>
+                        <CustomButton
+                            style={styles.AlertButton}
+                            onPress={_ => props.navigation.navigate(`Alert-${idx}`, { subject, report })} title="Próximo"
+                        />
+                        <View style={styles.teste1}>
+                            <AlertStatusForm PagesLen={2} currPage={name} inputs={subject, report} navigate={props.navigation.navigate} />
+                            <TouchableOpacity style={styles.BackBtn} onPress={_ => navigation.navigate('Home')}>
+                                <Text style={styles.back}>Voltar</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
         </ScrollView>
     )
 }
@@ -173,14 +173,17 @@ const Page2 = props => {
                 firebase.FIREBASE
                     .firestore()
                     .collection("ALERT")
-                    .doc(firebase.token)
+                    .doc()
                     .set(addAlert)
 
                 Alert.alert(
                     "Alerta Criado",
                     "O aviso foi gerado e estará disponível em breve!",
                     [
-                        { text: "Ir ao Feed" }
+                        {
+                            text: "Ir ao Feed",
+                            onPress: () => navigation.navigate('Home', {refresh: true})
+                        },
                     ],
                     { cancelable: false }
                 );
@@ -209,7 +212,7 @@ const Page2 = props => {
                         arrElements={arrElements}
                     />
                     <AlertMap
-                        setAddress={setAddress}                   
+                        setAddress={setAddress}
                     />
                     <AlertDate
                         setDate={setDate}
@@ -227,7 +230,7 @@ const Page2 = props => {
                     <CustomButton
                         style={styles.AlertButton}
                         onPress={handleNewAlert} title="Criar Alerta"
-                    />                    
+                    />
 
                     <View style={styles.teste2}>
                         <AlertStatusForm PagesLen={2} currPage={name} inputs={{ a: Math.random() }} navigate={navigation.navigate} />
@@ -307,7 +310,7 @@ const styles = StyleSheet.create({
     },
     AlertButton: {
         width: 240,
-        marginTop:10
+        marginTop: 10
     },
     BackBtn: {
         // alignSelf: 'center'
@@ -319,7 +322,7 @@ const styles = StyleSheet.create({
     },
     Alert1Buttons: {
         flex: 0.7,
-        justifyContent: "space-around"        
+        justifyContent: "space-around"
     },
     teste1: {
         // borderWidth: 1,
@@ -332,6 +335,6 @@ const styles = StyleSheet.create({
         // borderWidth: 1,
         paddingTop: 15,
         flex: 0.6,
-        justifyContent: 'space-around'      
-    }   
+        justifyContent: 'space-around'
+    }
 })
