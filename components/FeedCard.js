@@ -14,7 +14,7 @@ const FeedCard = ({ postData }) => {
     const handleLike = _ => {
         if (isEmpty == emptyClass[0]) {
             setIsEmpty(emptyClass[1])
-            setUpvotes(upvotes + 1)
+            setUpvotes(upvotes + 1)            
         }
         else {
             setIsEmpty(emptyClass[0])

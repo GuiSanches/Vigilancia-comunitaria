@@ -43,7 +43,6 @@ export function AlertIcon(props) {
       name="bell-ring-outline"
       size={28}
       color={props.focused ? Colors.tabIconSelected : 'white'}
-      // style={{ marginBottom: -3 }}
     />
   )
 }

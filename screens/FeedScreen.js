@@ -16,8 +16,10 @@ import {
 } from "../components/CustomElements";
 import FeedCard from '../components/FeedCard';
 import gatao from '../assets/images/gatao.jpeg'
+import DefaultUser from '../assets/images/teste.jpeg'
 import Topbar from '../components/topbar';
 import { withFirebaseHOC } from "../config/Firebase";
+import moment from "moment";
 const VALID_EMAIL = "";
 const VALID_PASSWORD = "";
 
@@ -38,7 +40,39 @@ const data = Array.from({
     length: 20
 }, _ => postTemplate)
 
-
+const getPostTime = then =>{
+    let now = new Date();
+    let diff = moment(now,"DD/MM/YYYY").diff(moment(then,"DD/MM/YYYY"));
+    let duration = moment.duration(diff);    
+    if(duration.years()>0){
+        if(duration.years()==1)
+            return "há mais de um ano"
+        else
+            return "há mais de "+ duration.years() +" anos"
+    }else if(duration.months()>0){
+        if(duration.months()==1)
+            return "há mais de um mês"
+        else
+            return "há mais de "+ duration.months() +" meses"
+    }else if(duration.days()>0){
+        if(duration.days()==1){
+            if(duration.hours() > 0) 
+                return "há "+ duration.days() +" dias e "+duration.hours()+" horas"
+            else  
+                return "há um dia"
+        }                       
+        return "há "+ duration.years() +" dias"
+    }else if(duration.hours() > 0){        
+        if(duration.minutes()>10)
+            return "há "+ duration.hours() +" horas"
+        else
+            return "há "+ duration.hours() +" h "+duration.minutes()+" min"
+    }else if(duration.minutes() > 0){
+        return "há "+ duration.minutes() +" minutos"
+    }else{
+        return "há "+ duration.seconds() +" segundos"
+    }
+}
 
 const FeedScreen = props => {
     const { navigation, firebase, user } = props;
@@ -50,7 +84,6 @@ const FeedScreen = props => {
         handleRefresh()
     }, [])
     const getProducts = async _ => {
-        console.log("props.firebase.user.city: " + firebase.user.city)
         if (posts.length < allPost.length) {
             setRefreshing(true)
             await new Promise(r => setTimeout(r, 700));
@@ -59,8 +92,7 @@ const FeedScreen = props => {
         }
     }
 
-    const handleRefresh = async _ => {
-        console.log("props.firebase.user.city: " + firebase.user.city)
+    const handleRefresh = async _ => { 
         setRefreshing(true)
         let newPosts = await RefreshPosts()
         setAllPost(newPosts)
@@ -70,8 +102,6 @@ const FeedScreen = props => {
 
     const RefreshPosts = async _ => {
         try {
-            console.log("Local city: " + firebase.user.city)
-            console.log("Comando Retornado do fireBase!: ")
             const QuerySnaphot = await firebase.FIREBASE
                 .firestore()
                 .collection("ALERT")
@@ -82,16 +112,24 @@ const FeedScreen = props => {
 
             const documents = QuerySnaphot
                 .docs // Array QueryDocumentSnapshot
-                .map(document => {
+                .map(document => {                   
                     const alert = document.data()
+                    var userImg, userNick               
+                    if(alert.anonymous){
+                        userImg = DefaultUser
+                        userNick= 'Anônimo'
+                    }else{
+                        userImg = gatao
+                        userNick = alert.nickname || 'Nickname'                       
+                    }                                     
                     return ({
                         id: 0,
                         user: {
-                            name: 'Anônimo',
-                            img: gatao
-                        },
+                            name: userNick,
+                            img: userImg
+                        },                        
                         title: alert.subject || '',
-                        date: `há ${5 + parseInt(Math.random() * 10)} minutos`,
+                        date: getPostTime(alert.created_at.toDate()),
                         labels: ['assalto', 'animal louco', 'iluminação'],
                         location: alert.neighborhood || '',
                         content: alert.content || '',
@@ -99,7 +137,7 @@ const FeedScreen = props => {
                     })
                 })
 
-            console.log(documents)
+            //console.log(documents)
 
             return documents
         }

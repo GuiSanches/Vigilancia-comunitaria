@@ -5,6 +5,7 @@ import {
     View,
     TouchableOpacity,
     StatusBar,
+    Alert
 } from 'react-native';
 import Topbar from '../components/topbar';
 import { withFirebaseHOC } from "../config/Firebase";
@@ -52,7 +53,17 @@ const ProfileScreen = ({ navigation, firebase, userData }) => {
               .firestore()
               .collection("USER")
               .doc(firebase.token)
-              console.log("sucesso")
+              
+              Alert.alert(
+                "Perfil Salvo!",
+                "Os dados inseridos foram salvos",
+                [
+                    {
+                        text: "OK"
+                    },
+                ],
+                { cancelable: false }
+            );
             
             return updateOption.update({
                 cep: cep,
@@ -66,7 +77,17 @@ const ProfileScreen = ({ navigation, firebase, userData }) => {
               
         } 
         catch (e) {
-            return console.log("erro")
+            Alert.alert(
+                "Erro ao salvar perfil!",
+                e.message,
+                [
+                    {
+                        text: "OK"
+                    },
+                ],
+                { cancelable: false }
+            );
+            throw e
             //console.log(Object)
         }
     }
