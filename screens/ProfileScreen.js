@@ -5,6 +5,7 @@ import {
     View,
     TouchableOpacity,
     StatusBar,
+    Alert
 } from 'react-native';
 import Topbar from '../components/topbar';
 import { withFirebaseHOC } from "../config/Firebase";
@@ -147,7 +148,36 @@ const ProfileScreen = ({ navigation, firebase, userData }) => {
                         </View>
                     </View>
 
-                    <TouchableOpacity style={styles.OutBtn} onPress={update}>
+                    <TouchableOpacity style={styles.OutBtn} onPress={() => Alert.alert(
+                        "Gardien",
+                        "Deseja salvar ?",
+                        [
+                            {
+                            text: "Não",
+                            onPress: () => {
+                                setEmail(firebase.user.email);
+                                setPhone(firebase.user.phone);
+                                setCep(firebase.user.cep);
+                                setCity(firebase.user.city);
+                                setUf(firebase.user.uf);
+                                setStreet(firebase.user.street);
+                                setNeightborhood(firebase.user.neightborhood);
+                                setNumberHome(firebase.user.number.toString());
+                            },
+                            style: "cancel"
+                            },
+                            { text: "Sim", onPress: () => {update,  Alert.alert(
+                                "Gardien",
+                                "Salvo, com sucesso",
+                                [
+                                  { text: "OK", onPress: () => console.log("OK Pressed") }
+                                ],
+                                { cancelable: false }
+                              )} }
+                        ],
+                        { cancelable: false }
+                        )
+                    }>
                         <Text style={styles.OutBtnTxt}>SALVAR</Text>
                     </TouchableOpacity>
                 </View>
