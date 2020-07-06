@@ -6,7 +6,7 @@ import { Ionicons, EvilIcons } from '@expo/vector-icons';
 // localização, labels(Iluminação, furto...)
 
 const FeedCard = ({ postData }) => {
-    const { Reactions, comments, content, user, title, date, location, labels, id } = postData;
+    const { Reactions, comments, content, user, title, date, location, labels, id, anonymous } = postData;
     const emptyClass = ["-empty", '']
     const [isEmpty, setIsEmpty] = React.useState(emptyClass[0])
     const [upvotes, setUpvotes] = React.useState(postData.upvotes)
@@ -15,6 +15,7 @@ const FeedCard = ({ postData }) => {
         if (isEmpty == emptyClass[0]) {
             setIsEmpty(emptyClass[1])
             setUpvotes(upvotes + 1)
+            console.log("anonymous: "+anonymous)
         }
         else {
             setIsEmpty(emptyClass[0])

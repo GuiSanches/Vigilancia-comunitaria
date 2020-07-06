@@ -16,6 +16,7 @@ import {
 } from "../components/CustomElements";
 import FeedCard from '../components/FeedCard';
 import gatao from '../assets/images/gatao.jpeg'
+import DefaultUser from '../assets/images/DefaultUserAlt.jpeg'
 import Topbar from '../components/topbar';
 import { withFirebaseHOC } from "../config/Firebase";
 const VALID_EMAIL = "";
@@ -88,8 +89,9 @@ const FeedScreen = props => {
                         id: 0,
                         user: {
                             name: 'Anônimo',
-                            img: gatao
+                            img: DefaultUser
                         },
+                        anonymous: alert.anonymous,
                         title: alert.subject || '',
                         date: `há ${5 + parseInt(Math.random() * 10)} minutos`,
                         labels: ['assalto', 'animal louco', 'iluminação'],
