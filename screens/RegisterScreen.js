@@ -17,7 +17,7 @@ import { withFirebaseHOC } from "../config/Firebase";
 import { AlertInput } from '../components/AlertCustomElements';
 import { SimpleLineIcons, Ionicons, Fontisto, Feather, EvilIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import megafone from '../assets/images/teste.jpeg'
+import megafone from '../assets/images/annonymous.jpeg'
 import { AlertLayoutScreen } from './AlertScreen';
 import axios from 'axios'
 

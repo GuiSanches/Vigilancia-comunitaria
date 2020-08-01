@@ -33,9 +33,6 @@ const ProfileScreen = ({ navigation, firebase, userData }) => {
         firebase.user.neightborhood,
         firebase.user.street + ' nº ' + firebase.user.number
     ])
-
-    
-    
     
     //states usados para Update
     const [email, setEmail] = React.useState(firebase.user.email);

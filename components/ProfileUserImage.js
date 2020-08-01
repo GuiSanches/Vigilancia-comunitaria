@@ -59,7 +59,7 @@ export default ProfileImage = props => {
             const ext = result.uri.split('.').pop(); // Extract image extension
             const response = await fetch(result.uri);
             const blob = await response.blob();
-            firebase.FIREBASE.storage().ref().child('UIDSDASDAKN1231.' + ext).put(blob)
+            firebase.FIREBASE.storage().ref().child(`ProfileImg/${firebase.token}.${ext}`).put(blob)
                 .on(
                     firebase.FIREBASE.storage.TaskEvent.STATE_CHANGED,
                     snapshot => {
