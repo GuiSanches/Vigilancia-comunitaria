@@ -153,10 +153,11 @@ const LoginScreen = (props) => {
                     style={styles.opcoesFinais}>
                     Criar uma nova conta
                 </CustomText>
+                {/* TO DO, FIX GOOGLE LOG IN
                 <Button
                     title="Logar com Google "
                     onPress={async () => handleLoginGoogle()}
-                />
+                /> */}
             </ImageBackground>
 
         </KeyboardAvoidingView >
