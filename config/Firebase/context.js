@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
-import { AsyncStorage } from 'react-native'
-import Firebase from './firebase'
+import { AsyncStorage } from 'react-native';
+import Firebase from './firebase';
 
 const FirebaseContext = createContext();
 
